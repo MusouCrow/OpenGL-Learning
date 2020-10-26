@@ -1,4 +1,5 @@
 #include <fstream>
+#include <sstream>
 #include "file.h"
 
 string File::FormatPath(string path) {
@@ -14,13 +15,9 @@ string File::ReadFile(string path) {
         return "";
     }
 
-    string content;
-    
-    while (!file.eof()) {
-        file >> content;
-    }
-
+    stringstream stream;
+    stream << file.rdbuf();
     file.close();
 
-    return content;
+    return stream.str();
 }

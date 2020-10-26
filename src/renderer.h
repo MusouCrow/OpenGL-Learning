@@ -1,17 +1,17 @@
 #ifndef RENDERER_H
 #define RENDERER_H
 
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
 #include "common.h"
 
 class Renderer {
 public:
     static Renderer* GetInstance();
-    void Init();
+    void Init(int width, int height);
     void Draw();
 private:
     int shader;
+    unsigned int vao;
+    unsigned int vbo;
 };
 
 #endif
