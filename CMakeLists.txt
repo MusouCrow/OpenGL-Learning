@@ -13,6 +13,8 @@ add_subdirectory(${GLEW_DIR}/build/cmake)
 
 # 添加头文件目录
 include_directories(${GLFW_DIR}/include/)
+include_directories(${GLEW_DIR}/include/)
+include_directories(src/)
 
 # Mac需要引用Cocoa
 IF (APPLE)
