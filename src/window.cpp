@@ -6,15 +6,17 @@ Window* Window::GetInstance() {
     return &instance;
 }
 
-void Window::Init(int width, int height, string title) {
+void Window::Init(int width, int height, string title, function<void()> OnDraw) {
     glfwInit();
     this->window = glfwCreateWindow(width, height, title.c_str(), NULL, NULL);
     glfwMakeContextCurrent(this->window);
+
+    this->OnDraw = OnDraw;
 }
 
 void Window::Update() {
     while (!glfwWindowShouldClose(this->window)) {
-        glClear(GL_COLOR_BUFFER_BIT);
+        this->OnDraw();
         glfwSwapBuffers(this->window);
         glfwPollEvents();
     }
