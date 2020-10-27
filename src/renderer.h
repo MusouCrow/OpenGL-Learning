@@ -1,6 +1,7 @@
 #ifndef RENDERER_H
 #define RENDERER_H
 
+#include <vector>
 #include "common.h"
 #include "render/mesh.h"
 
@@ -13,7 +14,7 @@ private:
     int shader;
     unsigned int vao;
     unsigned int vbo;
-    shared_ptr<Mesh> p_mesh;
+    vector<Mesh*> meshs;
 };
 
 #endif
