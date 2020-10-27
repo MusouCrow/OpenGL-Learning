@@ -8,6 +8,12 @@ Shader::Shader(string path) {
     this->Init(path);
 }
 
+Shader::~Shader() {
+    if (this->id != 0) {
+        glDeleteProgram(this->id);
+    }
+}
+
 void Shader::Init(string path) {
     string vert_src = File::ReadFile(path + ".vs");
     string frag_src = File::ReadFile(path + ".fs");

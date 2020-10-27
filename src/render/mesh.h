@@ -7,14 +7,17 @@
 
 class Mesh {
 public:
-    Mesh(Array<float>& vertices, string shader);
+    Mesh(Array<float>& vertices, Array<int>& indices, string shader);
+    ~Mesh();
     void Draw();
+    Shader shader;
 private:
     Array<float> vertices;
+    Array<int> indices;
+
     unsigned int vao;
     unsigned int vbo;
     unsigned int ebo;
-    Shader shader;
     void InitVert();
 };
 

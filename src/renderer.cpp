@@ -17,19 +17,31 @@ void Renderer::Init(int width, int height) {
     
     glViewport(0, 0, width, height);
 
-    // 模型的三个顶点（XYZ）
+    // 模型的4个顶点（XYZ）
     float vertices[] = {
-        -0.5f, -0.5f, 0.0f, // left
-        0.5f, -0.5f, 0.0f, // right
-        0.0f,  0.5f, 0.0f // top
+        0.5f,  0.5f, 0.0f,  // top right
+        0.5f, -0.5f, 0.0f,  // bottom right
+        -0.5f, -0.5f, 0.0f,  // bottom left
+        -0.5f,  0.5f, 0.0f   // top left 
     };
 
-    auto array = Array<float> {
+    // 顶点的索引
+    int indices[] = {
+        0, 1, 3, // first Triangle
+        1, 2, 3 // second Triangle
+    };
+
+    auto vertices_array = Array<float> {
         vertices,
         sizeof(vertices) / sizeof(float)
     };
 
-    this->p_mesh = make_shared<Mesh>(array, "shader/test");
+    auto indices_array = Array<int> {
+        indices,
+        sizeof(indices) / sizeof(int)
+    };
+
+    this->p_mesh = make_shared<Mesh>(vertices_array, indices_array, "shader/test");
 }
 
 void Renderer::Draw() {
