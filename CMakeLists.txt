@@ -6,9 +6,11 @@ set(GLFW_DIR 3rd/glfw)
 set(GLAD_DIR 3rd/glad)
 
 # 把src目录下的所有cpp文件加入到SRC_DIR变量
+aux_source_directory(${GLAD_DIR}/src/. SRC_DIR)
 aux_source_directory(src/. SRC_DIR)
 aux_source_directory(src/lib/. SRC_DIR)
-aux_source_directory(${GLAD_DIR}/src/. SRC_DIR)
+aux_source_directory(src/util/. SRC_DIR)
+aux_source_directory(src/render/. SRC_DIR)
 
 # 编译库
 add_subdirectory(${GLFW_DIR})
