@@ -23,9 +23,9 @@ string File::ReadFile(string path) {
     return stream.str();
 }
 
-unsigned char* File::ReadImage(string path, int& width, int& height) {
+unsigned char* File::ReadImage(string path, int& width, int& height, int& channel) {
     path = File::FormatPath(path);
-    unsigned char *data = stbi_load(path.c_str(), &width, &height, 0, 0);
+    unsigned char *data = stbi_load(path.c_str(), &width, &height, &channel, 0);
     
     if (data == nullptr) {
         cout << "Can't open image: " << path << endl;

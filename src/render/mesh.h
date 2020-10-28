@@ -5,13 +5,15 @@
 #include "util/array.hpp"
 #include "util/color.hpp"
 #include "shader.h"
+#include "texture.h"
 
 class Mesh {
 public:
     Mesh(Array<float>& vertices, Array<int>& indices, string shader, string image);
     ~Mesh();
     void Draw();
-    Shader shader;
+    Shader* shader;
+    Texture* texture;
 private:
     Array<float> vertices;
     Array<int> indices;
@@ -19,7 +21,6 @@ private:
     unsigned int vao;
     unsigned int vbo;
     unsigned int ebo;
-    int texture;
     void InitVert();
 };
 

@@ -1,39 +1,15 @@
 #include <glad/glad.h>
 #include "lib/file.h"
-#include "stb_image.h"
 #include "mesh.h"
-
-int InitTexture(string path) {
-    unsigned int texture;
-    glGenTextures(1, &texture); // 创建1个纹理对象
-    glBindTexture(GL_TEXTURE_2D, texture); // 绑定纹理对象，接下来的纹理操作都会对应它
-    
-    // 设置围绕方式
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-
-    // 设置过滤模式
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    
-    int width, height;
-    unsigned char* data = File::ReadImage(path, width, height);
-
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-    File::FreeImage(data);
-
-    return texture;
-}
 
 Mesh::Mesh(Array<float>& vertices, Array<int>& indices, string shader, string image) {
     this->vertices.Clone(vertices);
     this->indices.Clone(indices);
     
-    this->shader.Init(shader);
-    
-    this->InitVert();
+    this->shader = new Shader(shader);
+    this->texture = new Texture(image);
 
-    this->texture = InitTexture(image);
+    this->InitVert();
 }
 
 Mesh::~Mesh() {
@@ -68,8 +44,8 @@ void Mesh::InitVert() {
 }
 
 void Mesh::Draw() {
-    glBindTexture(GL_TEXTURE_2D, this->texture); // 绑定纹理，将会影响Shader的Texture Uniform
-    this->shader.Use();
+    this->texture->Bind();
+    this->shader->Use();
     
     glBindVertexArray(this->vao); // 绑定VAO，使用相应顶点属性
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->ebo); // 绑定EBO，使用相应顶点索引

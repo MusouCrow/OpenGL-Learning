@@ -6,10 +6,8 @@
 
 class Shader {
 public:
-    Shader();
     Shader(string path);
     ~Shader();
-    void Init(string path);
     int GetId();
     int GetLocation(string name);
     void Use();
