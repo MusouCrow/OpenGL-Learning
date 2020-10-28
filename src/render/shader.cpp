@@ -46,11 +46,60 @@ int Shader::GetId() {
     return this->id;
 }
 
-void Shader::SetColor(string name, Color& color) {
+int Shader::GetLocation(string name) {
+    return glGetUniformLocation(this->id, name.c_str());
+}
+
+void Shader::Use() {
     glUseProgram(this->id);
-        int location = glGetUniformLocation(this->id, name.c_str());
-        glUniform4f(location, color.r, color.g, color.b, color.a);
-    glUseProgram(0);
+}
+
+void Shader::SetInt(string name, int value) {
+    this->Use();
+    int location = this->GetLocation(name);
+    glUniform1i(location, value);
+}
+
+void Shader::SetFloat(string name, float value) {
+    this->Use();
+    int location = this->GetLocation(name);
+    glUniform1f(location, value);
+}
+
+void Shader::SetColor(string name, Color& color) {
+    this->Use();
+    int location = this->GetLocation(name);
+    glUniform4f(location, color.r, color.g, color.b, color.a);
+}
+
+int Shader::GetInt(string name) {
+    this->Use();
+    int location = this->GetLocation(name);
+    
+    int value;
+    glGetUniformiv(this->id, location, &value);
+    
+    return value;
+}
+
+float Shader::GetFloat(string name) {
+    this->Use();
+    int location = this->GetLocation(name);
+
+    float value;
+    glGetUniformfv(this->id, location, &value);
+    
+    return value;
+}
+
+Color Shader::GetColor(string name) {
+    this->Use();
+    int location = this->GetLocation(name);
+
+    Color color;
+    glGetUniformfv(this->id, location, (float*)&color);
+    
+    return color;
 }
 
 void Shader::Compile(int shader, string& src) {
