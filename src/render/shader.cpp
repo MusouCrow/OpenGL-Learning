@@ -46,6 +46,13 @@ int Shader::GetId() {
     return this->id;
 }
 
+void Shader::SetColor(string name, Color& color) {
+    glUseProgram(this->id);
+        int location = glGetUniformLocation(this->id, name.c_str());
+        glUniform4f(location, color.r, color.g, color.b, color.a);
+    glUseProgram(0);
+}
+
 void Shader::Compile(int shader, string& src) {
     const char* code = src.c_str();
 

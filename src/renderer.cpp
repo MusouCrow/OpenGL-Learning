@@ -1,5 +1,6 @@
 #include <glad/glad.h>
 #include "util/array.hpp"
+#include "util/color.hpp"
 #include "render/mesh.h"
 #include "renderer.h"
 
@@ -46,7 +47,8 @@ void Renderer::Init(int width, int height) {
             vertices[i] += 0.5f;
         }
 
-        this->meshs.push_back(new Mesh(vertices_array, indices_array, "shader/test"));
+        Color color {0.2f, 0.2f, 1.0f, 1.0f};
+        this->meshs.push_back(new Mesh(vertices_array, indices_array, "shader/test", color));
     }
     
     {
@@ -76,7 +78,8 @@ void Renderer::Init(int width, int height) {
             vertices[i] -= 0.5f;
         }
 
-        this->meshs.push_back(new Mesh(vertices_array, indices_array, "shader/test"));
+        Color color {1.0f, 0.2f, 0.2f, 1.0f};
+        this->meshs.push_back(new Mesh(vertices_array, indices_array, "shader/test", color));
     }
 }
 

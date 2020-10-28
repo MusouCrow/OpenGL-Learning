@@ -2,11 +2,12 @@
 #include "lib/file.h"
 #include "mesh.h"
 
-Mesh::Mesh(Array<float>& vertices, Array<int>& indices, string shader) {
+Mesh::Mesh(Array<float>& vertices, Array<int>& indices, string shader, Color& color) {
     this->vertices.Clone(vertices);
     this->indices.Clone(indices);
     
     this->shader.Init(shader);
+    this->shader.SetColor("outColor", color);
     
     this->InitVert();
 }
