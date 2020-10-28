@@ -7,6 +7,8 @@ class File {
 public:
     static string FormatPath(string path);
     static string ReadFile(string path);
+    static unsigned char* ReadImage(string path, int& width, int& height);
+    static void FreeImage(unsigned char* data);
 };
 
 #endif

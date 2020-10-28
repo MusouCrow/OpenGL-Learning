@@ -1,5 +1,6 @@
 #include <fstream>
 #include <sstream>
+#include "stb_image.h"
 #include "file.h"
 
 string File::FormatPath(string path) {
@@ -20,4 +21,19 @@ string File::ReadFile(string path) {
     file.close();
 
     return stream.str();
+}
+
+unsigned char* File::ReadImage(string path, int& width, int& height) {
+    path = File::FormatPath(path);
+    unsigned char *data = stbi_load(path.c_str(), &width, &height, 0, 0);
+    
+    if (data == nullptr) {
+        cout << "Can't open image: " << path << endl;
+    }
+    
+    return data;
+}
+
+void File::FreeImage(unsigned char* data) {
+    stbi_image_free(data);
 }

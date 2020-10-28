@@ -8,7 +8,7 @@
 
 class Mesh {
 public:
-    Mesh(Array<float>& vertices, Array<int>& indices, string shader, Color& color);
+    Mesh(Array<float>& vertices, Array<int>& indices, string shader, string image);
     ~Mesh();
     void Draw();
     Shader shader;
@@ -19,6 +19,7 @@ private:
     unsigned int vao;
     unsigned int vbo;
     unsigned int ebo;
+    int texture;
     void InitVert();
 };
 
