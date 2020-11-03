@@ -4,6 +4,7 @@ project(BGFX_PROJECT)
 set(CMAKE_CXX_STANDARD 11)
 set(GLFW_DIR 3rd/glfw)
 set(GLAD_DIR 3rd/glad)
+set(GLM_DIR 3rd/glm)
 set(STB_DIR 3rd/stb)
 
 # 把src目录下的所有cpp文件加入到SRC_DIR变量
@@ -20,6 +21,7 @@ add_subdirectory(${GLFW_DIR})
 # 添加头文件目录
 include_directories(${GLFW_DIR}/include/)
 include_directories(${GLAD_DIR}/include/)
+include_directories(${GLM_DIR}/)
 include_directories(${STB_DIR}/)
 include_directories(src/)
 
