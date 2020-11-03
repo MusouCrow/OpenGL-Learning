@@ -1,4 +1,5 @@
 #include <glad/glad.h>
+#include <glm/gtc/type_ptr.hpp>
 #include "lib/file.h"
 #include "shader.h"
 
@@ -64,6 +65,12 @@ void Shader::SetColor(string name, Color& color) {
     this->Use();
     int location = this->GetLocation(name);
     glUniform4f(location, color.r, color.g, color.b, color.a);
+}
+
+void Shader::SetMatrix(string name, glm::mat4& matrix) {
+    this->Use();
+    int location = this->GetLocation(name);
+    glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
 }
 
 int Shader::GetInt(string name) {

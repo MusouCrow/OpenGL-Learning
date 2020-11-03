@@ -2,13 +2,14 @@
 #include "lib/file.h"
 #include "mesh.h"
 
-Mesh::Mesh(Array<float>& vertices, Array<int>& indices, string shader, string image) {
+Mesh::Mesh(Array<float>& vertices, Array<int>& indices, string shader, string image, glm::mat4& model) {
     this->vertices.Clone(vertices);
     this->indices.Clone(indices);
     
     this->shader = new Shader(shader);
     this->texture = new Texture(image);
 
+    this->shader->SetMatrix("Model", model);
     this->InitVert();
 }
 

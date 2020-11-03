@@ -1,6 +1,7 @@
 #ifndef RENDER_SHADER_H
 #define RENDER_SHADER_H
 
+#include <glm/glm.hpp>
 #include "common.h"
 #include "util/color.hpp"
 
@@ -15,7 +16,8 @@ public:
     void SetInt(string name, int value);
     void SetFloat(string name, float value);
     void SetColor(string name, Color& color);
-
+    void SetMatrix(string name, glm::mat4& matrix);
+    
     int GetInt(string name);
     float GetFloat(string name);
     Color GetColor(string name);

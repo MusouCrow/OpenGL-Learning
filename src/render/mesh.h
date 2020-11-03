@@ -1,6 +1,7 @@
 #ifndef RENDER_MESH_H
 #define RENDER_MESH_H
 
+#include <glm/glm.hpp>
 #include "common.h"
 #include "util/array.hpp"
 #include "util/color.hpp"
@@ -9,7 +10,7 @@
 
 class Mesh {
 public:
-    Mesh(Array<float>& vertices, Array<int>& indices, string shader, string image);
+    Mesh(Array<float>& vertices, Array<int>& indices, string shader, string image, glm::mat4& model);
     ~Mesh();
     void Draw();
     Shader* shader;
