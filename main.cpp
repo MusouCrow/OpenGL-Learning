@@ -3,15 +3,15 @@
 #include <glm/vec3.hpp>
 
 #include "window.h"
-#include "renderer.h"
+#include "pipeline.h"
 #include "lib/file.h"
 
 int main() {
     auto window = Window::GetInstance();
-    auto renderer = Renderer::GetInstance();
+    auto pipeline = Pipeline::GetInstance();
 
-    window->Init(800, 600, "OpenGL-Learning", bind(&Renderer::Draw, renderer));
-    renderer->Init(800, 600);
+    window->Init(800, 600, "OpenGL-Learning", bind(&Pipeline::Draw, pipeline));
+    pipeline->Init(800, 600);
     
     window->Update();
     window->Shutdown();

@@ -1,20 +1,20 @@
-#ifndef RENDERER_H
-#define RENDERER_H
+#ifndef PIPELINE_H
+#define PIPELINE_H
 
 #include <vector>
 #include "common.h"
-#include "render/mesh.h"
+#include "render/renderer/base.h"
 
-class Renderer {
+class Pipeline {
 public:
-    static Renderer* GetInstance();
+    static Pipeline* GetInstance();
     void Init(int width, int height);
     void Draw();
 private:
     int shader;
     unsigned int vao;
     unsigned int vbo;
-    vector<Mesh*> meshs;
+    vector<Renderer*> renderers;
 };
 
 #endif

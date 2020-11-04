@@ -1,11 +1,9 @@
 #include <glad/glad.h>
 #include "lib/file.h"
-#include "mesh.h"
+#include "base.h"
 
-Mesh::Mesh(Array<float>& vertices, Array<int>& indices, string shader, string image, glm::mat4& model) {
-    this->vertices.Clone(vertices);
-    this->indices.Clone(indices);
-    
+Renderer::Renderer(Mesh& mesh, string shader, string image, glm::mat4& model) {
+    this->mesh = mesh;
     this->shader = new Shader(shader);
     this->texture = new Texture(image);
 
@@ -13,12 +11,7 @@ Mesh::Mesh(Array<float>& vertices, Array<int>& indices, string shader, string im
     this->InitVert();
 }
 
-Mesh::~Mesh() {
-    delete[] this->vertices.list;
-    delete[] this->indices.list;
-}
-
-void Mesh::InitVert() {
+void Renderer::InitVert() {
     glGenVertexArrays(1, &this->vao); // 创建1个顶点缓冲对象
     glGenBuffers(1, &this->vbo); // 创建1个顶点缓冲对象
     glGenBuffers(1, &this->ebo); // 创建1个索引缓冲对象
@@ -26,9 +19,9 @@ void Mesh::InitVert() {
     glBindVertexArray(this->vao); // 绑定VAO，接下来的顶点状态操作都将基于VAO
     glBindBuffer(GL_ARRAY_BUFFER, this->vbo); // 绑定VBO，类型为顶点属性
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->ebo); // 绑定EBO，类型为顶点索引
-
-    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * this->vertices.count, this->vertices.list, GL_STATIC_DRAW); // 传入顶点数据到VBO
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(int) * this->indices.count, this->indices.list, GL_STATIC_DRAW); // 传入索引数据到EBO
+    
+    glBufferData(GL_ARRAY_BUFFER, sizeof(float) * this->mesh.vertices.count, this->mesh.vertices.list, GL_STATIC_DRAW); // 传入顶点数据到VBO
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(int) * this->mesh.indices.count, this->mesh.indices.list, GL_STATIC_DRAW); // 传入索引数据到EBO
     
     // 解析传入的顶点数据给着色器使用，VBO → VAO
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 5, 0); // 坐标
@@ -44,11 +37,11 @@ void Mesh::InitVert() {
     glBindVertexArray(0);
 }
 
-void Mesh::Draw() {
+void Renderer::Draw() {
     this->texture->Bind();
     this->shader->Use();
     
     glBindVertexArray(this->vao); // 绑定VAO，使用相应顶点属性
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->ebo); // 绑定EBO，使用相应顶点索引
-    glDrawElements(GL_TRIANGLES, this->indices.count, GL_UNSIGNED_INT, nullptr); // 绘制由索引组织的面
+    glDrawElements(GL_TRIANGLES, this->mesh.indices.count, GL_UNSIGNED_INT, nullptr); // 绘制由索引组织的面
 }

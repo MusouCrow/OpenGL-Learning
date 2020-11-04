@@ -14,6 +14,7 @@ aux_source_directory(src/. SRC_DIR)
 aux_source_directory(src/lib/. SRC_DIR)
 aux_source_directory(src/util/. SRC_DIR)
 aux_source_directory(src/render/. SRC_DIR)
+aux_source_directory(src/render/renderer/. SRC_DIR)
 
 # 编译库
 add_subdirectory(${GLFW_DIR})

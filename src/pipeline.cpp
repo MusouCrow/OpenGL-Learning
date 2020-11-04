@@ -4,16 +4,16 @@
 
 #include "util/array.hpp"
 #include "util/color.hpp"
-#include "render/mesh.h"
-#include "renderer.h"
+#include "render/mesh.hpp"
+#include "pipeline.h"
 
-Renderer* Renderer::GetInstance() {
-    static Renderer instance;
+Pipeline* Pipeline::GetInstance() {
+    static Pipeline instance;
 
     return &instance;
 }
 
-Mesh* NewMesh(string path, glm::mat4 model) {
+Renderer* NewRenderer(string path, glm::mat4 model) {
     // 顶点的索引
     int indices[] = {
         0, 1, 3, // first Triangle
@@ -38,11 +38,15 @@ Mesh* NewMesh(string path, glm::mat4 model) {
         indices,
         sizeof(indices) / sizeof(int)
     };
+    
+    Mesh mesh;
+    mesh.indices.Clone(indices_array);
+    mesh.vertices.Clone(vertices_array);
 
-    return new Mesh(vertices_array, indices_array, "shader/test", path, model);
+    return new Renderer(mesh, "shader/test", path, model);
 }
 
-void Renderer::Init(int width, int height) {
+void Pipeline::Init(int width, int height) {
     if (!gladLoadGL()) {
         cout << "Glad Load GL Failed!" << endl;
         exit(-1);
@@ -52,14 +56,14 @@ void Renderer::Init(int width, int height) {
     
     auto model = glm::mat4(1.0f);
     model = glm::rotate(model, glm::radians(45.0f), glm::vec3(1.0f, 1.0f, 0.0f));
-    this->meshs.push_back(NewMesh("image/container.jpg", model));
+    this->renderers.push_back(NewRenderer("image/container.jpg", model));
 }
 
-void Renderer::Draw() {
+void Pipeline::Draw() {
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
     
-    for (auto mesh : this->meshs) {
+    for (auto mesh : this->renderers) {
         mesh->Draw();
     }
 }
