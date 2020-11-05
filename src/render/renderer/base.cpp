@@ -2,13 +2,23 @@
 #include "lib/file.h"
 #include "base.h"
 
-Renderer::Renderer(shared_ptr<Mesh> mesh, string shader, string image, glm::mat4& model) {
+Renderer::Renderer(shared_ptr<Mesh> mesh, string shader, string image) {
     this->mesh = mesh;
     this->shader = make_shared<Shader>(shader);
     this->texture = make_shared<Texture>(image);
-
-    this->shader->SetMatrix("Model", model);
+    this->transform = make_shared<Transform>(bind(&Renderer::AdjustMatrix, this));
+    
     this->InitVert();
+    this->AdjustMatrix();
+}
+
+void Renderer::Draw() {
+    this->texture->Bind();
+    this->shader->Use();
+    
+    glBindVertexArray(this->vao); // 绑定VAO，使用相应顶点属性
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->ebo); // 绑定EBO，使用相应顶点索引
+    glDrawElements(GL_TRIANGLES, this->mesh->indices.count, GL_UNSIGNED_INT, nullptr); // 绘制由索引组织的面
 }
 
 void Renderer::InitVert() {
@@ -40,11 +50,7 @@ void Renderer::InitVert() {
     glBindVertexArray(0);
 }
 
-void Renderer::Draw() {
-    this->texture->Bind();
-    this->shader->Use();
-    
-    glBindVertexArray(this->vao); // 绑定VAO，使用相应顶点属性
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->ebo); // 绑定EBO，使用相应顶点索引
-    glDrawElements(GL_TRIANGLES, this->mesh->indices.count, GL_UNSIGNED_INT, nullptr); // 绘制由索引组织的面
+void Renderer::AdjustMatrix() {
+    auto matrix = this->transform->GetMatrix();
+    this->shader->SetMatrix("Model", matrix);
 }

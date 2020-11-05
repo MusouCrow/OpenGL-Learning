@@ -40,8 +40,10 @@ Renderer* NewRenderer(string path, glm::mat4 model) {
     };
     
     auto mesh = make_shared<Mesh>(vertices_array, indices_array);
+    auto renderer = new Renderer(mesh, "shader/test", path);
+    renderer->transform->SetPosition(glm::vec3(0.5f, 0.0f, 0.0f));
     
-    return new Renderer(mesh, "shader/test", path, model);
+    return renderer;
 }
 
 void Pipeline::Init(int width, int height) {
