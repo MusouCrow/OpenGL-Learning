@@ -4,7 +4,7 @@
 
 #include "util/array.hpp"
 #include "util/color.hpp"
-#include "render/mesh.hpp"
+#include "render/mesh.h"
 #include "pipeline.h"
 
 Pipeline* Pipeline::GetInstance() {
@@ -39,10 +39,8 @@ Renderer* NewRenderer(string path, glm::mat4 model) {
         sizeof(indices) / sizeof(int)
     };
     
-    Mesh mesh;
-    mesh.indices.Clone(indices_array);
-    mesh.vertices.Clone(vertices_array);
-
+    auto mesh = make_shared<Mesh>(vertices_array, indices_array);
+    
     return new Renderer(mesh, "shader/test", path, model);
 }
 

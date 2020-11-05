@@ -6,17 +6,17 @@
 #include "util/color.hpp"
 #include "../shader.h"
 #include "../texture.h"
-#include "../mesh.hpp"
+#include "../mesh.h"
 
 class Renderer {
 public:
-    Renderer(Mesh& mesh, string shader, string image, glm::mat4& model);
+    Renderer(shared_ptr<Mesh> mesh, string shader, string image, glm::mat4& model);
     void Draw();
-    Shader* shader;
-    Texture* texture;
+    shared_ptr<Shader> shader;
+    shared_ptr<Texture> texture;
 private:
-    Mesh mesh;
-
+    shared_ptr<Mesh> mesh;
+    
     unsigned int vao;
     unsigned int vbo;
     unsigned int ebo;

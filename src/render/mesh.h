@@ -3,7 +3,10 @@
 
 #include "util/array.hpp"
 
-struct Mesh {
+class Mesh {
+public:
+    Mesh(Array<float>& vertices, Array<int>& indices);
+    ~Mesh();
     Array<float> vertices;
     Array<int> indices;
 };
