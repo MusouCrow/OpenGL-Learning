@@ -16,8 +16,12 @@ public:
     void SetScale(glm::vec3 scale);
     void SetRotate(glm::vec3 rotate);
 private:
+    glm::mat4 position;
+    glm::mat4 scale;
+    glm::mat4 rotation;
+    glm::vec3 rotation_val;
     glm::mat4 matrix;
-    glm::vec3 rotation;
+    void Adjust();
     function<void()> OnAdjust;
 };
 

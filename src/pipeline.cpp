@@ -13,7 +13,7 @@ Pipeline* Pipeline::GetInstance() {
     return &instance;
 }
 
-Renderer* NewRenderer(string path, glm::mat4 model) {
+Renderer* NewRenderer(string path, glm::vec3 position, glm::vec3 scale, glm::vec3 rotate) {
     // 顶点的索引
     int indices[] = {
         0, 1, 3, // first Triangle
@@ -41,8 +41,15 @@ Renderer* NewRenderer(string path, glm::mat4 model) {
     
     auto mesh = make_shared<Mesh>(vertices_array, indices_array);
     auto renderer = new Renderer(mesh, "shader/test", path);
-    renderer->transform->SetPosition(glm::vec3(0.5f, 0.0f, 0.0f));
     
+    renderer->transform->SetPosition(position);
+    renderer->transform->SetScale(scale);
+    renderer->transform->SetRotate(rotate);
+
+    position = renderer->transform->GetPosition();
+    scale = renderer->transform->GetScale();
+    rotate = renderer->transform->GetRotate();
+
     return renderer;
 }
 
@@ -54,9 +61,8 @@ void Pipeline::Init(int width, int height) {
     
     glViewport(0, 0, width, height);
     
-    auto model = glm::mat4(1.0f);
-    model = glm::rotate(model, glm::radians(45.0f), glm::vec3(1.0f, 1.0f, 0.0f));
-    this->renderers.push_back(NewRenderer("image/container.jpg", model));
+    this->renderers.push_back(NewRenderer("image/container.jpg", glm::vec3(0.5f, 0.0f, 0.0f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(45.0f, 45.0f, 0.0f)));
+    this->renderers.push_back(NewRenderer("image/wall.jpg", glm::vec3(-0.5f, 0.1f, 0.0f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(0.0f, 0.0f, 45.0f)));
 }
 
 void Pipeline::Draw() {
