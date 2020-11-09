@@ -46,10 +46,6 @@ Renderer* NewRenderer(string path, glm::vec3 position, glm::vec3 scale, glm::vec
     renderer->transform->SetScale(scale);
     renderer->transform->SetRotate(rotate);
 
-    position = renderer->transform->GetPosition();
-    scale = renderer->transform->GetScale();
-    rotate = renderer->transform->GetRotate();
-
     return renderer;
 }
 
