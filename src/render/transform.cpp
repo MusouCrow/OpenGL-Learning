@@ -7,7 +7,8 @@ Transform::Transform(function<void()> OnAdjust) {
     this->scale = glm::mat4(1.0f);
     this->rotation = glm::mat4(1.0f);
     
-    this->OnAdjust = OnAdjust;   
+    this->OnAdjust = OnAdjust;
+    this->AdjustDirection();
 }
 
 glm::vec3 Transform::GetPosition() {

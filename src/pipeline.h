@@ -3,18 +3,19 @@
 
 #include <vector>
 #include "common.h"
+#include "render/camera.h"
 #include "render/renderer/base.h"
 
 class Pipeline {
 public:
     static Pipeline* GetInstance();
+    shared_ptr<Camera> camera;
     void Init(int width, int height);
     void Draw();
 private:
-    int shader;
-    unsigned int vao;
-    unsigned int vbo;
+    float r;
     vector<Renderer*> renderers;
+    void OnCameraUpdated();
 };
 
 #endif
