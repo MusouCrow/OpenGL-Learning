@@ -22,8 +22,7 @@ private:
     glm::mat4 view;
     glm::mat4 projection;
     function<void()> OnAdjust;
-    void Adjust();
-    void AdjustMatrix();
+    void AdjustView();
 };
 
 #endif
