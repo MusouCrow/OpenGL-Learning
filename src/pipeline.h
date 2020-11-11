@@ -14,6 +14,8 @@ public:
     void Draw();
 private:
     float r;
+    float s;
+    int dir;
     vector<Renderer*> renderers;
     void OnCameraUpdated();
 };

@@ -56,16 +56,32 @@ void Pipeline::Init(int width, int height) {
     }
     
     this->r = 0.0f;
+    this->s = 0.0f;
+    this->dir = 1;
+
     this->camera = make_shared<Camera>(width, height, bind(&Pipeline::OnCameraUpdated, this));
+    
+    this->renderers.push_back(NewRenderer("image/wall.jpg", glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(0.0f, 0.0f, 45.0f)));
 
-    this->renderers.push_back(NewRenderer("image/container.jpg", glm::vec3(0.5f, 0.0f, 0.0f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(45.0f, 45.0f, 0.0f)));
-    this->renderers.push_back(NewRenderer("image/wall.jpg", glm::vec3(-0.5f, 0.1f, 0.0f), glm::vec3(0.5f, 0.5f, 0.5f), glm::vec3(0.0f, 0.0f, 45.0f)));
-
+    this->camera->transform->SetPosition(glm::vec3(0.0f, 0.0f, -2.0f));
     this->OnCameraUpdated();
 }
 
 void Pipeline::Draw() {
-    this->r += 1;
+    if (this->s < 1.5f) {
+        this->s += 0.1f;
+    }
+
+    if (this->r >= 5.0f && this->dir == 1) {
+        this->dir = -1;
+        this->s = -this->s;
+    }
+    else if (this->r <= -5.0f && this->dir == -1) {
+        this->dir = 1;
+        this->s = -this->s;
+    }
+    
+    this->r += this->s * this->dir;
     this->camera->transform->SetRotate(glm::vec3(0.0f, this->r, 0.0f));
     
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
@@ -77,9 +93,11 @@ void Pipeline::Draw() {
 }
 
 void Pipeline::OnCameraUpdated() {
-    auto matrix = this->camera->GetMatrix();
-
+    auto view = this->camera->GetView();
+    auto projection = this->camera->GetProjection();
+    
     for (auto mesh : this->renderers) {
-        mesh->shader->SetMatrix("View", matrix);
+        mesh->shader->SetMatrix("View", view);
+        mesh->shader->SetMatrix("Projection", projection);
     }
 }

@@ -7,8 +7,9 @@ out vec2 uv;
 
 uniform mat4 Model;
 uniform mat4 View;
+uniform mat4 Projection;
 
 void main() {
     uv = texCoord;
-    gl_Position = View * Model * vec4(vert.x, vert.y, vert.z, 1.0);
+    gl_Position = Projection * View * Model * vec4(vert.x, vert.y, vert.z, 1.0);
 }
