@@ -11,6 +11,7 @@ public:
     void Init(int width, int height, string title, function<void()> OnDraw);
     void Update();
     void Shutdown();
+    GLFWwindow* GetFlag();
     function<void()> OnDraw;
 private:
     GLFWwindow* window;

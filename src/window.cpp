@@ -34,3 +34,7 @@ void Window::Update() {
 void Window::Shutdown() {
     glfwTerminate();
 }
+
+GLFWwindow* Window::GetFlag() {
+    return this->window;
+}
