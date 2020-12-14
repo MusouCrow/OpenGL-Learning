@@ -9,20 +9,21 @@ Gui* Gui::GetInstance() {
     return &instance;
 }
 
-void Gui::Init(GLFWwindow* window) {
+void Gui::Init(GLFWwindow* window, function<void()> OnDraw) {
     ImGui::CreateContext();
 
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init("#version 330");
+
+    this->OnDraw = OnDraw;
 }
 
 void Gui::BeginDraw() {
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
-
-    bool open;
-    ImGui::ShowDemoWindow(&open);
+    
+    this->OnDraw();
     ImGui::Render();
 }
 
