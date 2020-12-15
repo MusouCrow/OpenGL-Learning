@@ -17,8 +17,9 @@ void Renderer::Draw() {
     this->shader->Use();
     
     glBindVertexArray(this->vao); // 绑定VAO，使用相应顶点属性
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->ebo); // 绑定EBO，使用相应顶点索引
-    glDrawElements(GL_TRIANGLES, this->mesh->indices.count, GL_UNSIGNED_INT, nullptr); // 绘制由索引组织的面
+    //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->ebo); // 绑定EBO，使用相应顶点索引
+    //glDrawElements(GL_TRIANGLES, this->mesh->indices.count, GL_UNSIGNED_INT, nullptr); // 绘制由索引组织的面
+    glDrawArrays(GL_TRIANGLES, 0, 36);
 }
 
 void Renderer::InitVert() {

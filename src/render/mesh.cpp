@@ -1,8 +1,13 @@
 #include "mesh.h"
 
-Mesh::Mesh(Array<float>& vertices, Array<int>& indices) {
-    this->vertices.Clone(vertices);
-    this->indices.Clone(indices);
+Mesh::Mesh(Array<float>* vertices, Array<int>* indices) {
+    if (vertices != nullptr) {
+        this->vertices.Clone(*vertices);
+    }
+
+    if (indices != nullptr) {
+        this->indices.Clone(*indices);
+    }
 }
 
 Mesh::~Mesh() {
