@@ -103,6 +103,10 @@ void Pipeline::Init(int width, int height) {
     this->OnCameraUpdated();
 
     glEnable(GL_DEPTH_TEST);
+    
+    glEnable(GL_CULL_FACE);
+    glFrontFace(GL_CW);
+    glCullFace(GL_BACK);
 }
 
 void Pipeline::Draw() {
