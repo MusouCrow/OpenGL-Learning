@@ -3,6 +3,7 @@
 
 #include "common.h"
 #include "pipeline.h"
+#include "timer.h"
 
 void UIDraw() {
     bool opened = true;
@@ -11,6 +12,9 @@ void UIDraw() {
 
     ImGui::Begin("Test", &opened, flag);
     ImGui::SetWindowPos(pos, ImGuiCond_None);
+
+    int fps = Time::GetInstance()->GetFPS();
+    ImGui::Text("FPS: %d", fps);
 
     ImGui::Text("Viewpoint");
     
