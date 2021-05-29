@@ -1,4 +1,5 @@
 #include "window.h"
+#include "timer.h"
 
 Window* Window::GetInstance() {
     static Window instance;
@@ -28,6 +29,7 @@ void Window::Update() {
         this->OnDraw();
         glfwSwapBuffers(this->window);
         glfwPollEvents();
+        Time::GetInstance()->Tick();
     }
 }
 
