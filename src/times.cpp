@@ -1,5 +1,4 @@
-#include <time.h>
-#include "timer.h"
+#include "times.h"
 #include "common.h"
 
 Time* Time::GetInstance() {
@@ -20,10 +19,10 @@ void Time::Tick() {
     clock_t lateClock = this->nowClock;
     this->nowClock = clock();
     this->dt = (double)(this->nowClock - lateClock) / CLOCKS_PER_SEC * 10;
-    double less = 1.0 / 60.0;
+    double less = 1.0 / this->targetFPS;
 
-    if (this-> dt < less) {
-        this-> dt = less;
+    if (this->dt < less) {
+        this->dt = less;
     }
 
     this->fpsTimer += this->dt;

@@ -1,5 +1,7 @@
-#ifndef TIMER_H
-#define TIMER_H
+#ifndef TIMES_H
+#define TIMES_H
+
+#include <time.h>
 
 class Time {
 public:
@@ -7,6 +9,7 @@ public:
     float GetDeltaTime();
     int GetFPS();
     void Tick();
+    int targetFPS = 60;
 private:
     double dt = 0;
     double fpsTimer = 0;

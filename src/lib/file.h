@@ -1,7 +1,7 @@
 #ifndef LIB_FILE_H
 #define LIB_FILE_H
 
-#include "common.h"
+#include "../common.h"
 
 class File {
 public:

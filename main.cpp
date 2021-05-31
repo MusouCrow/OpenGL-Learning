@@ -6,12 +6,17 @@
 #include "pipeline.h"
 #include "gui.h"
 #include "lib/file.h"
-#include "ui.cpp"
+#include "env.cpp"
 #include "util/tween.h"
 
-void Draw() {
+void Init();
+void Update();
+
+void Tick() {
     auto pipeline = Pipeline::GetInstance();
     auto gui = Gui::GetInstance();
+
+    Update();
 
     gui->BeginDraw();
     pipeline->Draw();
@@ -23,9 +28,11 @@ int main() {
     auto pipeline = Pipeline::GetInstance();
     auto gui = Gui::GetInstance();
     
-    window->Init(800, 600, "OpenGL-Learning", Draw);
+    window->Init(800, 600, "OpenGL-Learning", Tick);
     pipeline->Init(800, 600);
     gui->Init(window->GetFlag(), UIDraw);
+
+    Init();
     
     window->Update();
     window->Shutdown();

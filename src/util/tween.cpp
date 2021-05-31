@@ -72,6 +72,7 @@ void Tween::Enter(float from, float to, float time, Easing easing) {
     this->to = to;
     this->time = time;
     this->easing = easing;
+    this->clock = 0;
 
     this->Adjust();
 }

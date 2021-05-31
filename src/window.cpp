@@ -1,5 +1,5 @@
 #include "window.h"
-#include "timer.h"
+#include "times.h"
 
 Window* Window::GetInstance() {
     static Window instance;
@@ -7,7 +7,7 @@ Window* Window::GetInstance() {
     return &instance;
 }
 
-void Window::Init(int width, int height, string title, function<void()> OnDraw) {
+void Window::Init(int width, int height, string title, function<void()> OnTick) {
     // 初始化GLFW，设置OpenGL版本号与核心模式
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -21,12 +21,12 @@ void Window::Init(int width, int height, string title, function<void()> OnDraw) 
     this->window = glfwCreateWindow(width, height, title.c_str(), NULL, NULL);
     glfwMakeContextCurrent(this->window);
 
-    this->OnDraw = OnDraw;
+    this->OnTick = OnTick;
 }
 
 void Window::Update() {
     while (!glfwWindowShouldClose(this->window)) {
-        this->OnDraw();
+        this->OnTick();
         glfwSwapBuffers(this->window);
         glfwPollEvents();
         Time::GetInstance()->Tick();
