@@ -11,7 +11,7 @@
 TranUnit units[3] = {
     {glm::vec3(0.0f, 0.0f, -2.0f), glm::vec3(0.0f, 0.0f, 0.0f)}, // Front
     {glm::vec3(2.0f, 0.0f, 0.0f), glm::vec3(0.0f, 90.0f, 0.0f)}, // Left
-    {glm::vec3(0.0f, 2.0f, 0.0f), glm::vec3(-90.0f, 0.0f, 0.0f)} // Top
+    {glm::vec3(0.0f, 2.0f, 0.0f), glm::vec3(-89.0f, 0.0f, 0.0f)} // Top
 };
 
 TranUnit current = TranUnit();
