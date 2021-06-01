@@ -8,6 +8,7 @@ class Math {
 public:
     static float Lerp(float a, float b, float t);
     static glm::vec3 Lerp(glm::vec3 a, glm::vec3 b, float t);
+    static float Random(float a, float b);
 };
 
 #endif
