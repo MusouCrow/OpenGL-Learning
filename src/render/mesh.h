@@ -1,14 +1,14 @@
 #ifndef RENDER_MESH_H
 #define RENDER_MESH_H
 
-#include "util/array.hpp"
+#include <vector>
+#include "../common.h"
 
 class Mesh {
 public:
-    Mesh(Array<float>* vertices, Array<int>* indices);
-    ~Mesh();
-    Array<float> vertices;
-    Array<int> indices;
+    Mesh(vector<float> vertices, vector<int> indices);
+    vector<float> vertices;
+    vector<int> indices;
 };
 
 #endif

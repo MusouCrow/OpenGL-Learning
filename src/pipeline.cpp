@@ -1,9 +1,9 @@
+#include <vector>
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
 #include "lib/math.h"
-#include "util/array.hpp"
 #include "util/color.hpp"
 #include "render/mesh.h"
 #include "pipeline.h"
@@ -14,9 +14,9 @@ Pipeline* Pipeline::GetInstance() {
     return &instance;
 }
 
-Renderer* NewRenderer(string path, glm::vec3 position, glm::vec3 scale, glm::vec3 rotate) {
+shared_ptr<Mesh> NewMesh() {
     // 顶点着色器的数据
-    float* vertices = new float[180] {
+    vector<float> vertices = {
         // Back face
         -0.5f, -0.5f, -0.5f,  0.0f, 0.0f, // Bottom-left
         0.5f,  0.5f, -0.5f,  1.0f, 1.0f, // top-right
@@ -61,12 +61,10 @@ Renderer* NewRenderer(string path, glm::vec3 position, glm::vec3 scale, glm::vec
         -0.5f,  0.5f,  0.5f,  0.0f, 0.0f  // bottom-left
     };
 
-    auto vertices_array = Array<float> {
-        vertices,
-        180
-    };
-    
-    auto mesh = make_shared<Mesh>(&vertices_array, nullptr);
+    return make_shared<Mesh>(vertices, vector<int>());
+}
+
+Renderer* NewRenderer(string path, shared_ptr<Mesh> mesh, glm::vec3 position, glm::vec3 scale, glm::vec3 rotate) {
     auto renderer = new Renderer(mesh, "shader/test", path);
     
     renderer->transform->SetPosition(position);
@@ -88,6 +86,8 @@ void Pipeline::Init(int width, int height) {
 
     this->camera = make_shared<Camera>(width, height, bind(&Pipeline::OnCameraUpdated, this));
     
+    auto mesh = NewMesh();
+
     for (int i = 0; i < 10; i++) {
         float size = Math::Random(0.2f, 0.5f);
 
@@ -95,7 +95,7 @@ void Pipeline::Init(int width, int height) {
         auto scale = glm::vec3(size, size, size);
         auto rot = glm::vec3(Math::Random(-45.0f, 45.0f), Math::Random(-45.0f, 45.0f), Math::Random(-45.0f, 45.0f));
 
-        auto renderer = NewRenderer("image/wall.jpg", pos, scale, rot);
+        auto renderer = NewRenderer("image/wall.jpg", mesh, pos, scale, rot);
         this->renderers.push_back(renderer);
     }
     
