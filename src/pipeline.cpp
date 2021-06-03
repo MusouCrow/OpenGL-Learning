@@ -4,6 +4,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include "lib/math.h"
+#include "lib/model.h"
 #include "util/color.hpp"
 #include "render/mesh.h"
 #include "pipeline.h"
@@ -12,56 +13,6 @@ Pipeline* Pipeline::GetInstance() {
     static Pipeline instance;
 
     return &instance;
-}
-
-shared_ptr<Mesh> NewMesh() {
-    // 顶点着色器的数据
-    vector<float> vertices = {
-        // Back face
-        -0.5f, -0.5f, -0.5f,  0.0f, 0.0f, // Bottom-left
-        0.5f,  0.5f, -0.5f,  1.0f, 1.0f, // top-right
-        0.5f, -0.5f, -0.5f,  1.0f, 0.0f, // bottom-right         
-        0.5f,  0.5f, -0.5f,  1.0f, 1.0f, // top-right
-        -0.5f, -0.5f, -0.5f,  0.0f, 0.0f, // bottom-left
-        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f, // top-left
-        // Front face
-        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f, // bottom-left
-        0.5f, -0.5f,  0.5f,  1.0f, 0.0f, // bottom-right
-        0.5f,  0.5f,  0.5f,  1.0f, 1.0f, // top-right
-        0.5f,  0.5f,  0.5f,  1.0f, 1.0f, // top-right
-        -0.5f,  0.5f,  0.5f,  0.0f, 1.0f, // top-left
-        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f, // bottom-left
-        // Left face
-        -0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // top-right
-        -0.5f,  0.5f, -0.5f,  1.0f, 1.0f, // top-left
-        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // bottom-left
-        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // bottom-left
-        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f, // bottom-right
-        -0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // top-right
-        // Right face
-        0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // top-left
-        0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // bottom-right
-        0.5f,  0.5f, -0.5f,  1.0f, 1.0f, // top-right         
-        0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // bottom-right
-        0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // top-left
-        0.5f, -0.5f,  0.5f,  0.0f, 0.0f, // bottom-left     
-        // Bottom face
-        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // top-right
-        0.5f, -0.5f, -0.5f,  1.0f, 1.0f, // top-left
-        0.5f, -0.5f,  0.5f,  1.0f, 0.0f, // bottom-left
-        0.5f, -0.5f,  0.5f,  1.0f, 0.0f, // bottom-left
-        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f, // bottom-right
-        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // top-right
-        // Top face
-        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f, // top-left
-        0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // bottom-right
-        0.5f,  0.5f, -0.5f,  1.0f, 1.0f, // top-right     
-        0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // bottom-right
-        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f, // top-left
-        -0.5f,  0.5f,  0.5f,  0.0f, 0.0f  // bottom-left
-    };
-
-    return make_shared<Mesh>(vertices, vector<int>());
 }
 
 Renderer* NewRenderer(string path, shared_ptr<Mesh> mesh, glm::vec3 position, glm::vec3 scale, glm::vec3 rotate) {
@@ -86,19 +37,13 @@ void Pipeline::Init(int width, int height) {
 
     this->camera = make_shared<Camera>(width, height, bind(&Pipeline::OnCameraUpdated, this));
     
-    auto mesh = NewMesh();
+    auto mesh = Model::NewRectangle();    
+    auto pos = glm::vec3();
+    auto scale = glm::vec3(0.5f, 0.5f, 0.5f);
+    auto rot = glm::vec3(-45.0f, 45.0f, 0.0f);
+    auto renderer = NewRenderer("image/wall.jpg", mesh, pos, scale, rot);
+    this->renderers.push_back(renderer);
 
-    for (int i = 0; i < 10; i++) {
-        float size = Math::Random(0.2f, 0.5f);
-
-        auto pos = glm::vec3(Math::Random(-0.7f, 0.7f), Math::Random(-0.7f, 0.3f), Math::Random(-0.7f, 0.7f));
-        auto scale = glm::vec3(size, size, size);
-        auto rot = glm::vec3(Math::Random(-45.0f, 45.0f), Math::Random(-45.0f, 45.0f), Math::Random(-45.0f, 45.0f));
-
-        auto renderer = NewRenderer("image/wall.jpg", mesh, pos, scale, rot);
-        this->renderers.push_back(renderer);
-    }
-    
     this->camera->transform->SetPosition(glm::vec3(0.0f, 0.0f, -2.0f));
     this->OnCameraUpdated();
 
