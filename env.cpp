@@ -5,6 +5,7 @@
 #include "pipeline.h"
 #include "times.h"
 #include "lib/math.h"
+#include "lib/model.h"
 #include "util/tween.h"
 #include "util/tranUnit.hpp"
 
@@ -35,10 +36,27 @@ void SetCamera(TranUnit& unit) {
     tween.Enter(0.0f, 1.0f, 0.7f, Easing::InOutQuad);
 }
 
+shared_ptr<Renderer> NewRenderer(string path, shared_ptr<Mesh> mesh, glm::vec3 position, glm::vec3 scale, glm::vec3 rotate) {
+    auto renderer = make_shared<Renderer>(mesh, "shader/test", path);
+    
+    renderer->transform->SetPosition(position);
+    renderer->transform->SetScale(scale);
+    renderer->transform->SetRotate(rotate);
+
+    return renderer;
+}
+
 void Init() {
     auto transform = Pipeline::GetInstance()->camera->transform;
     transform->SetPosition(glm::vec3(0.0f, 0.0f, -2.0f));
     transform->SetRotate(glm::vec3(0.0f, 0.0f, 0.0f));
+
+    auto mesh = Model::NewRectangle();    
+    auto pos = glm::vec3();
+    auto scale = glm::vec3(0.5f, 0.5f, 0.5f);
+    auto rot = glm::vec3(-45.0f, 45.0f, 0.0f);
+    auto renderer = NewRenderer("image/wall.jpg", mesh, pos, scale, rot);
+    Pipeline::GetInstance()->AddRenderer(renderer);
 }
 
 void Update() {

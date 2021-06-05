@@ -12,11 +12,12 @@ public:
     shared_ptr<Camera> camera;
     void Init(int width, int height);
     void Draw();
+    void AddRenderer(shared_ptr<Renderer> renderer);
 private:
     float r;
     float s;
     int dir;
-    vector<Renderer*> renderers;
+    vector<shared_ptr<Renderer>> renderers;
     void OnCameraUpdated();
 };
 
