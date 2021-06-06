@@ -45,4 +45,4 @@ ELSE()
 ENDIF()
 
 add_executable(opengl_learning main.cpp ${SRC_DIR} ${IMGUI_SRC})
-target_link_libraries(opengl_learning glfw ${FRAMEWORK}) # 链接编译
+target_link_libraries(opengl_learning glfw assimp ${FRAMEWORK}) # 链接编译
