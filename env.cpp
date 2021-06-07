@@ -1,22 +1,18 @@
 #include <imgui.h>
 #include <glm/glm.hpp>
-#include <assimp/Importer.hpp>
-#include <assimp/scene.h>
-#include <assimp/postprocess.h>
 
 #include "common.h"
 #include "pipeline.h"
 #include "times.h"
 #include "lib/math.h"
-#include "lib/model.h"
 #include "lib/file.h"
 #include "util/tween.h"
 #include "util/tranUnit.hpp"
 
 TranUnit units[3] = {
-    {glm::vec3(0.0f, 0.0f, -2.0f), glm::vec3(0.0f, 0.0f, 0.0f)}, // Front
-    {glm::vec3(2.0f, 0.0f, 0.0f), glm::vec3(0.0f, 90.0f, 0.0f)}, // Left
-    {glm::vec3(0.0f, 2.0f, 0.0f), glm::vec3(-89.0f, 0.0f, 0.0f)} // Top
+    {glm::vec3(0.0f, 0.0f, -5.0f), glm::vec3(0.0f, 0.0f, 0.0f)}, // Front
+    {glm::vec3(5.0f, 0.0f, 0.0f), glm::vec3(0.0f, 90.0f, 0.0f)}, // Left
+    {glm::vec3(0.0f, 5.0f, 0.0f), glm::vec3(-89.0f, 0.0f, 0.0f)} // Top
 };
 
 TranUnit current = TranUnit();
@@ -52,22 +48,15 @@ shared_ptr<Renderer> NewRenderer(string path, shared_ptr<Mesh> mesh, glm::vec3 p
 
 void Init() {
     auto transform = Pipeline::GetInstance()->camera->transform;
-    transform->SetPosition(glm::vec3(0.0f, 0.0f, -2.0f));
+    transform->SetPosition(glm::vec3(0.0f, 0.0f, -5.0f));
     transform->SetRotate(glm::vec3(0.0f, 0.0f, 0.0f));
 
-    auto mesh = Model::NewRectangle();    
+    auto mesh = File::ReadMesh("model/box.obj"); 
     auto pos = glm::vec3();
     auto scale = glm::vec3(0.5f, 0.5f, 0.5f);
     auto rot = glm::vec3(-45.0f, 45.0f, 0.0f);
     auto renderer = NewRenderer("image/wall.jpg", mesh, pos, scale, rot);
     Pipeline::GetInstance()->AddRenderer(renderer);
-
-    Assimp::Importer importer;
-    auto path = File::FormatPath("model/box.obj");
-    auto scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs);
-    auto meshData = scene->mMeshes[0];
-
-    cout << meshData << endl;
 }
 
 void Update() {
