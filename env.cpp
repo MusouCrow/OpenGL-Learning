@@ -36,8 +36,8 @@ void SetCamera(TranUnit& unit) {
     tween.Enter(0.0f, 1.0f, 0.7f, Easing::InOutQuad);
 }
 
-shared_ptr<Renderer> NewRenderer(string path, shared_ptr<Mesh> mesh, glm::vec3 position, glm::vec3 scale, glm::vec3 rotate) {
-    auto renderer = make_shared<Renderer>(mesh, "shader/test", path);
+shared_ptr<Renderer> NewRenderer(string path, shared_ptr<Model> model, glm::vec3 position, glm::vec3 scale, glm::vec3 rotate) {
+    auto renderer = make_shared<Renderer>(model, "shader/test", path);
     
     renderer->transform->SetPosition(position);
     renderer->transform->SetScale(scale);
@@ -50,12 +50,12 @@ void Init() {
     auto transform = Pipeline::GetInstance()->camera->transform;
     transform->SetPosition(glm::vec3(0.0f, 0.0f, -5.0f));
     transform->SetRotate(glm::vec3(0.0f, 0.0f, 0.0f));
-
-    auto mesh = File::ReadMesh("model/box.obj"); 
+    
+    auto model = File::ReadModel("model/nanosuit.obj"); 
     auto pos = glm::vec3();
-    auto scale = glm::vec3(0.5f, 0.5f, 0.5f);
+    auto scale = glm::vec3(0.1f, 0.1f, 0.1f);
     auto rot = glm::vec3(-45.0f, 45.0f, 0.0f);
-    auto renderer = NewRenderer("image/wall.jpg", mesh, pos, scale, rot);
+    auto renderer = NewRenderer("image/wall.jpg", model, pos, scale, rot);
     Pipeline::GetInstance()->AddRenderer(renderer);
 }
 

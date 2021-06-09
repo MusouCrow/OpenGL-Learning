@@ -11,18 +11,13 @@
 
 class Renderer {
 public:
-    Renderer(shared_ptr<Mesh> mesh, string shader, string image);
+    Renderer(shared_ptr<Model> model, string shader, string image);
     void Draw();
     shared_ptr<Shader> shader;
     shared_ptr<Texture> texture;
     shared_ptr<Transform> transform;
 private:
-    shared_ptr<Mesh> mesh;
-    
-    unsigned int vao;
-    unsigned int vbo;
-    unsigned int ebo;
-    void InitVert();
+    shared_ptr<Model> model;
     void AdjustMatrix();
 };
 

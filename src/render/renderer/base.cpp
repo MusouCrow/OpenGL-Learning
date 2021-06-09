@@ -1,9 +1,7 @@
-#include <glad/glad.h>
-#include "lib/file.h"
 #include "base.h"
 
-Renderer::Renderer(shared_ptr<Mesh> mesh, string shader, string image) {
-    this->mesh = mesh;
+Renderer::Renderer(shared_ptr<Model> model, string shader, string image) {
+    this->model = model;
     this->shader = make_shared<Shader>(shader);
     this->texture = make_shared<Texture>(image);
     this->transform = make_shared<Transform>(bind(&Renderer::AdjustMatrix, this));
@@ -14,7 +12,10 @@ Renderer::Renderer(shared_ptr<Mesh> mesh, string shader, string image) {
 void Renderer::Draw() {
     this->texture->Bind();
     this->shader->Use();
-    this->mesh->Draw();
+
+    for (int i = 0; i < this->model->meshes.size(); i++) {
+        this->model->meshes[i]->Draw();
+    }
 }
 
 void Renderer::AdjustMatrix() {

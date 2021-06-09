@@ -10,7 +10,7 @@ public:
     static string ReadFile(string path);
     static unsigned char* ReadImage(string path, int& width, int& height, int& channel);
     static void FreeImage(unsigned char* data);
-    static shared_ptr<Mesh> ReadMesh(string path);
+    static shared_ptr<Model> ReadModel(string path);
 };
 
 #endif

@@ -29,4 +29,8 @@ private:
     unsigned int ebo = 0;
 };
 
+struct Model {
+    vector<shared_ptr<Mesh>> meshes;
+};
+
 #endif
