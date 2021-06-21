@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
-project(BGFX_PROJECT)
+project(opengl_learning)
 
 set(CMAKE_CXX_STANDARD 11)
 set(GLFW_DIR 3rd/glfw)
@@ -9,6 +9,7 @@ set(STB_DIR 3rd/stb)
 set(IMGUI_DIR 3rd/imgui)
 set(ASSIMP_DIR 3rd/assimp)
 set(ASSIMP_DIR2 build/3rd/assimp)
+set(JSONXX 3rd/jsonxx)
 
 set(IMGUI_SRC ${IMGUI_DIR}/backends/imgui_impl_glfw.cpp ${IMGUI_DIR}/backends/imgui_impl_opengl3.cpp)
 
@@ -35,6 +36,7 @@ include_directories(${STB_DIR}/)
 include_directories(${IMGUI_DIR}/)
 include_directories(${ASSIMP_DIR}/include/)
 include_directories(${ASSIMP_DIR2}/include/)
+include_directories(${JSONXX}/include/)
 include_directories(src/)
 
 # Mac需要引用Cocoa

@@ -10,3 +10,6 @@
 [submodule "3rd/assimp"]
 	path = 3rd/assimp
 	url = https://hub.fastgit.org/assimp/assimp.git
+[submodule "3rd/jsonxx"]
+	path = 3rd/jsonxx
+	url = https://github.com/Nomango/jsonxx.git
