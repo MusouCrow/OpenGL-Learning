@@ -93,3 +93,12 @@ shared_ptr<Model> File::ReadModel(string path) {
     
     return model;
 }
+
+jsonxx::json File::ReadJson(string path) {
+    path = File::FormatPath(path);
+    string content = File::ReadFile(path);
+    
+    auto json = jsonxx::json::parse(content);
+
+    return json;
+}
