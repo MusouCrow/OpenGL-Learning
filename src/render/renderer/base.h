@@ -4,6 +4,7 @@
 #include <glm/glm.hpp>
 #include "common.h"
 #include "util/color.hpp"
+#include "../material.h"
 #include "../shader.h"
 #include "../texture.h"
 #include "../mesh.h"
@@ -11,13 +12,14 @@
 
 class Renderer {
 public:
-    Renderer(shared_ptr<Model> model, string shader, string image);
+    Renderer(shared_ptr<Model> model, vector<shared_ptr<Material>> materials);
     void Draw();
-    shared_ptr<Shader> shader;
-    shared_ptr<Texture> texture;
+    void SetMatrix(string name, glm::mat4& matrix);
+    
+    vector<shared_ptr<Material>> materials;
     shared_ptr<Transform> transform;
-private:
     shared_ptr<Model> model;
+private:
     void AdjustMatrix();
 };
 

@@ -7,7 +7,7 @@ class Texture {
 public:
     Texture(string path);
     ~Texture();
-    void Bind();
+    void Bind(int index=0);
     void SetWrap(int wrap);
     void SetFilter(int filter);
     int GetWrap();

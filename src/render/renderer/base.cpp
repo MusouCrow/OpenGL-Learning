@@ -1,24 +1,26 @@
 #include "base.h"
 
-Renderer::Renderer(shared_ptr<Model> model, string shader, string image) {
+Renderer::Renderer(shared_ptr<Model> model, vector<shared_ptr<Material>> materials) {
     this->model = model;
-    this->shader = make_shared<Shader>(shader);
-    this->texture = make_shared<Texture>(image);
+    this->materials = materials;
     this->transform = make_shared<Transform>(bind(&Renderer::AdjustMatrix, this));
-    
     this->AdjustMatrix();
 }
 
 void Renderer::Draw() {
-    this->texture->Bind();
-    this->shader->Use();
-
     for (int i = 0; i < this->model->meshes.size(); i++) {
+        this->materials[i]->Bind();
         this->model->meshes[i]->Draw();
+    }
+}
+
+void Renderer::SetMatrix(string name, glm::mat4& matrix) {
+    for (auto material : materials) {
+        material->GetShader()->SetMatrix(name, matrix);
     }
 }
 
 void Renderer::AdjustMatrix() {
     auto matrix = this->transform->GetMatrix();
-    this->shader->SetMatrix("Model", matrix);
+    this->SetMatrix("Model", matrix);
 }

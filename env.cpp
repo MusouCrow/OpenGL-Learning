@@ -1,3 +1,4 @@
+#include <vector>
 #include <imgui.h>
 #include <glm/glm.hpp>
 
@@ -8,6 +9,7 @@
 #include "lib/file.h"
 #include "util/tween.h"
 #include "util/tranUnit.hpp"
+#include "render/material.h"
 
 TranUnit units[3] = {
     {glm::vec3(0.0f, 0.0f, -5.0f), glm::vec3(0.0f, 0.0f, 0.0f)}, // Front
@@ -36,9 +38,15 @@ void SetCamera(TranUnit& unit) {
     tween.Enter(0.0f, 1.0f, 0.7f, Easing::InOutQuad);
 }
 
-shared_ptr<Renderer> NewRenderer(string path, shared_ptr<Model> model, glm::vec3 position, glm::vec3 scale, glm::vec3 rotate) {
-    auto renderer = make_shared<Renderer>(model, "shader/test", path);
+shared_ptr<Renderer> NewRenderer(shared_ptr<Model> model, vector<string>& paths, glm::vec3 position, glm::vec3 scale, glm::vec3 rotate) {
+    vector<shared_ptr<Material>> materials;
+
+    for (auto path : paths) {
+        auto material = make_shared<Material>(path);
+        materials.push_back(material);
+    }
     
+    auto renderer = make_shared<Renderer>(model, materials);
     renderer->transform->SetPosition(position);
     renderer->transform->SetScale(scale);
     renderer->transform->SetRotate(rotate);
@@ -55,7 +63,17 @@ void Init() {
     auto pos = glm::vec3();
     auto scale = glm::vec3(0.1f, 0.1f, 0.1f);
     auto rot = glm::vec3(-45.0f, 45.0f, 0.0f);
-    auto renderer = NewRenderer("image/wall.jpg", model, pos, scale, rot);
+    auto paths = vector<string> {
+        "material/nanosuit/arm.json",
+        "material/nanosuit/body.json",
+        "material/nanosuit/glass.json",
+        "material/nanosuit/hand.json",
+        "material/nanosuit/helmet.json",
+        "material/nanosuit/leg.json",
+        "material/nanosuit/body.json"
+    };
+
+    auto renderer = NewRenderer(model, paths, pos, scale, rot);
     Pipeline::GetInstance()->AddRenderer(renderer);
 }
 

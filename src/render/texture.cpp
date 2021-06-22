@@ -12,7 +12,7 @@ Texture::Texture(string path) {
     int width, height, channel;
     unsigned char* data = File::ReadImage(path, width, height, channel);
     
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
     File::FreeImage(data);
 }
 
@@ -22,7 +22,8 @@ Texture::~Texture() {
     }
 }
 
-void Texture::Bind() {
+void Texture::Bind(int index) {
+    glActiveTexture(GL_TEXTURE0 + index);
     glBindTexture(GL_TEXTURE_2D, this->id); // 绑定纹理，将会影响Shader的Texture Uniform
 }
 
