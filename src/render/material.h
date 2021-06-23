@@ -10,13 +10,11 @@
 
 class Material {
 public:
-    Material(string path);
     Material(jsonxx::json& json);
     shared_ptr<Shader> GetShader();
     shared_ptr<Texture> GetTexture(string name);
     void Bind();
 private:
-    void Init(jsonxx::json& json);
     shared_ptr<Shader> shader;
     map<string, shared_ptr<Texture>> textureMap;
 };

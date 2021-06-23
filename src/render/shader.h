@@ -8,6 +8,7 @@
 class Shader {
 public:
     Shader(string path);
+    Shader(string& vert_src, string& frag_src);
     ~Shader();
     int GetId();
     int GetLocation(string name);

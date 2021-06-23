@@ -3,10 +3,7 @@
 #include "lib/file.h"
 #include "shader.h"
 
-Shader::Shader(string path) {
-    string vert_src = File::ReadFile(path + ".vs");
-    string frag_src = File::ReadFile(path + ".fs");
-
+Shader::Shader(string& vert_src, string& frag_src) {
     int vert_shader = glCreateShader(GL_VERTEX_SHADER);
     int frag_shader = glCreateShader(GL_FRAGMENT_SHADER);
 

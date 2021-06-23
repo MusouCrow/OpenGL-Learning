@@ -6,7 +6,7 @@
 #include "pipeline.h"
 #include "times.h"
 #include "lib/math.h"
-#include "lib/file.h"
+#include "lib/resource.h"
 #include "util/tween.h"
 #include "util/tranUnit.hpp"
 #include "render/material.h"
@@ -42,7 +42,7 @@ shared_ptr<Renderer> NewRenderer(shared_ptr<Model> model, vector<string>& paths,
     vector<shared_ptr<Material>> materials;
 
     for (auto path : paths) {
-        auto material = make_shared<Material>(path);
+        auto material = Resource::LoadMaterial(path);
         materials.push_back(material);
     }
     
@@ -58,8 +58,9 @@ void Init() {
     auto transform = Pipeline::GetInstance()->camera->transform;
     transform->SetPosition(glm::vec3(0.0f, 0.0f, -5.0f));
     transform->SetRotate(glm::vec3(0.0f, 0.0f, 0.0f));
-    
-    auto model = File::ReadModel("model/nanosuit.obj"); 
+
+    auto model = Resource::LoadModel("model/nanosuit.obj"); 
+    cout << model << endl;
     auto pos = glm::vec3();
     auto scale = glm::vec3(0.1f, 0.1f, 0.1f);
     auto rot = glm::vec3(-45.0f, 45.0f, 0.0f);
@@ -72,7 +73,7 @@ void Init() {
         "material/nanosuit/leg.json",
         "material/nanosuit/body.json"
     };
-
+    
     auto renderer = NewRenderer(model, paths, pos, scale, rot);
     Pipeline::GetInstance()->AddRenderer(renderer);
 }

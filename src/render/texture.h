@@ -5,7 +5,7 @@
 
 class Texture {
 public:
-    Texture(string path);
+    Texture(unsigned char* data, int width, int height, int channel);
     ~Texture();
     void Bind(int index=0);
     void SetWrap(int wrap);

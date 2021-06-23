@@ -2,18 +2,14 @@
 #include "lib/file.h"
 #include "texture.h"
 
-Texture::Texture(string path) {
-    glGenTextures(1, &this->id); // 创建1个纹理对象
+Texture::Texture(unsigned char* data, int width, int height, int channel) {
+    glGenTextures(1, &this->id);
 
-    this->Bind(); // 绑定纹理对象，接下来的纹理操作都会对应它
-    this->SetWrap(GL_REPEAT); // 设置围绕方式
-    this->SetFilter(GL_NEAREST); // 设置过滤模式
-    
-    int width, height, channel;
-    unsigned char* data = File::ReadImage(path, width, height, channel);
-    
+    this->Bind();
+    this->SetWrap(GL_REPEAT);
+    this->SetFilter(GL_NEAREST);
+
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-    File::FreeImage(data);
 }
 
 Texture::~Texture() {
