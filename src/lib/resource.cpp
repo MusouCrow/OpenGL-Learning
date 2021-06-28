@@ -1,24 +1,43 @@
 #include "resource.h"
 #include "file.h"
 
+auto Resource::textureMap = map<string, weak_ptr<Texture>>();
+auto Resource::shaderMap = map<string, weak_ptr<Shader>>();
+auto Resource::modelMap = map<string, weak_ptr<Model>>();
+auto Resource::materialMap = map<string, weak_ptr<Material>>();
+
 shared_ptr<Texture> Resource::LoadTexture(string path) {
+    if (textureMap.find(path) != textureMap.end() && textureMap[path].use_count() > 0) {
+        return textureMap[path].lock();
+    }
+
     int width, height, channel;
     unsigned char* data = File::ReadImage(path, width, height, channel);
     auto texture = make_shared<Texture>(data, width, height, channel);
     File::FreeImage(data);
-
+    textureMap[path] = texture;
+    
     return texture;
 }
 
 shared_ptr<Shader> Resource::LoadShader(string path) {
+    if (shaderMap.find(path) != shaderMap.end() && shaderMap[path].use_count() > 0) {
+        return shaderMap[path].lock();
+    }
+
     string vert_src = File::ReadFile(path + ".vs");
     string frag_src = File::ReadFile(path + ".fs");
     auto shader = make_shared<Shader>(vert_src, frag_src);
+    shaderMap[path] = shader;
 
     return shader;
 }
 
 shared_ptr<Model> Resource::LoadModel(string path) {
+    if (modelMap.find(path) != modelMap.end() && modelMap[path].use_count() > 0) {
+        return modelMap[path].lock();
+    }
+
     auto importer = File::ReadModelImporter(path);
 
     if (importer == nullptr) {
@@ -62,13 +81,42 @@ shared_ptr<Model> Resource::LoadModel(string path) {
         auto mesh = make_shared<Mesh>(vertices, indices);
         model->meshes.push_back(mesh);
     }
+
+    modelMap[path] = model;
     
     return model;
 }
 
 shared_ptr<Material> Resource::LoadMaterial(string path) {
+    if (materialMap.find(path) != materialMap.end() && materialMap[path].use_count() > 0) {
+        return materialMap[path].lock();
+    }
+
     auto json = File::ReadJson(path);
     auto material = make_shared<Material>(json);
+    materialMap[path] = material;
     
     return material;
+}
+
+void Resource::Log() {
+    cout << "===== Texture =====" << endl;
+    for (auto iter : textureMap) {
+        cout << iter.first << ", " << iter.second.lock() << endl;
+    }
+
+    cout << "===== Shader =====" << endl;
+    for (auto iter : shaderMap) {
+        cout << iter.first << ", " << iter.second.lock() << endl;
+    }
+
+    cout << "===== Model =====" << endl;
+    for (auto iter : modelMap) {
+        cout << iter.first << ", " << iter.second.lock() << endl;
+    }
+
+    cout << "===== Material =====" << endl;
+    for (auto iter : materialMap) {
+        cout << iter.first << ", " << iter.second.lock() << endl;
+    }
 }

@@ -60,7 +60,6 @@ void Init() {
     transform->SetRotate(glm::vec3(0.0f, 0.0f, 0.0f));
 
     auto model = Resource::LoadModel("model/nanosuit.obj"); 
-    cout << model << endl;
     auto pos = glm::vec3();
     auto scale = glm::vec3(0.1f, 0.1f, 0.1f);
     auto rot = glm::vec3(-45.0f, 45.0f, 0.0f);
@@ -76,6 +75,7 @@ void Init() {
     
     auto renderer = NewRenderer(model, paths, pos, scale, rot);
     Pipeline::GetInstance()->AddRenderer(renderer);
+    Resource::Log();
 }
 
 void Update() {
