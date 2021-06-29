@@ -2,7 +2,7 @@
 #include "material.h"
 
 Material::Material(jsonxx::json& json) {
-    this->shader = Resource::LoadShader("shader/" + json["Shader"].as_string());
+    this->shader = Resource::LoadShader(json["Shader"].as_string());
 
     for (auto iter : json) {
         auto key = iter.key();
@@ -10,7 +10,7 @@ Material::Material(jsonxx::json& json) {
         
         // 尾部命名为Map的是Texture
         if (key.substr(key.size() - 3, 3) == "Map") {
-            auto texture = Resource::LoadTexture("image/" + value.as_string());
+            auto texture = Resource::LoadTexture(value.as_string());
             this->textureMap[key] = texture;
         }
         else if (value.is_bool()) {

@@ -1,0 +1,17 @@
+{
+    "transform": {
+        "position": [0, 0, 0],
+        "scale": [0.1, 0.1, 0.1],
+        "rotation": [-45, 45, 0]
+    },
+    "model": "nanosuit.obj",
+    "materials": [
+        "nanosuit/arm",
+        "nanosuit/body",
+        "nanosuit/glass",
+        "nanosuit/hand",
+        "nanosuit/helmet",
+        "nanosuit/leg",
+        "nanosuit/body"
+    ]
+}

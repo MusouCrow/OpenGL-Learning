@@ -38,18 +38,11 @@ void SetCamera(TranUnit& unit) {
     tween.Enter(0.0f, 1.0f, 0.7f, Easing::InOutQuad);
 }
 
-shared_ptr<Renderer> NewRenderer(shared_ptr<Model> model, vector<string>& paths, glm::vec3 position, glm::vec3 scale, glm::vec3 rotate) {
-    vector<shared_ptr<Material>> materials;
-
-    for (auto path : paths) {
-        auto material = Resource::LoadMaterial(path);
-        materials.push_back(material);
-    }
-    
-    auto renderer = make_shared<Renderer>(model, materials);
-    renderer->transform->SetPosition(position);
-    renderer->transform->SetScale(scale);
-    renderer->transform->SetRotate(rotate);
+shared_ptr<Renderer> NewRenderer(shared_ptr<Prefab> prefab) {
+    auto renderer = make_shared<Renderer>(prefab->model, prefab->materials);
+    renderer->transform->SetPosition(prefab->position);
+    renderer->transform->SetScale(prefab->scale);
+    renderer->transform->SetRotate(prefab->rotation);
 
     return renderer;
 }
@@ -59,21 +52,8 @@ void Init() {
     transform->SetPosition(glm::vec3(0.0f, 0.0f, -5.0f));
     transform->SetRotate(glm::vec3(0.0f, 0.0f, 0.0f));
 
-    auto model = Resource::LoadModel("model/nanosuit.obj"); 
-    auto pos = glm::vec3();
-    auto scale = glm::vec3(0.1f, 0.1f, 0.1f);
-    auto rot = glm::vec3(-45.0f, 45.0f, 0.0f);
-    auto paths = vector<string> {
-        "material/nanosuit/arm.json",
-        "material/nanosuit/body.json",
-        "material/nanosuit/glass.json",
-        "material/nanosuit/hand.json",
-        "material/nanosuit/helmet.json",
-        "material/nanosuit/leg.json",
-        "material/nanosuit/body.json"
-    };
-    
-    auto renderer = NewRenderer(model, paths, pos, scale, rot);
+    auto prefab = Resource::LoadPrefab("nanosuit");
+    auto renderer = NewRenderer(prefab);
     Pipeline::GetInstance()->AddRenderer(renderer);
     Resource::Log();
 }

@@ -5,14 +5,15 @@ auto Resource::textureMap = map<string, weak_ptr<Texture>>();
 auto Resource::shaderMap = map<string, weak_ptr<Shader>>();
 auto Resource::modelMap = map<string, weak_ptr<Model>>();
 auto Resource::materialMap = map<string, weak_ptr<Material>>();
+auto Resource::prefabMap = map<string, weak_ptr<Prefab>>();
+
+#define CHECK_RES(dataMap, path) if (dataMap.find(path) != dataMap.end() && dataMap[path].use_count() > 0) return dataMap[path].lock();
 
 shared_ptr<Texture> Resource::LoadTexture(string path) {
-    if (textureMap.find(path) != textureMap.end() && textureMap[path].use_count() > 0) {
-        return textureMap[path].lock();
-    }
+    CHECK_RES(textureMap, path);
 
     int width, height, channel;
-    unsigned char* data = File::ReadImage(path, width, height, channel);
+    unsigned char* data = File::ReadImage("image/" + path, width, height, channel);
     auto texture = make_shared<Texture>(data, width, height, channel);
     File::FreeImage(data);
     textureMap[path] = texture;
@@ -21,12 +22,10 @@ shared_ptr<Texture> Resource::LoadTexture(string path) {
 }
 
 shared_ptr<Shader> Resource::LoadShader(string path) {
-    if (shaderMap.find(path) != shaderMap.end() && shaderMap[path].use_count() > 0) {
-        return shaderMap[path].lock();
-    }
+    CHECK_RES(shaderMap, path);
 
-    string vert_src = File::ReadFile(path + ".vs");
-    string frag_src = File::ReadFile(path + ".fs");
+    string vert_src = File::ReadFile("shader/" + path + ".vs");
+    string frag_src = File::ReadFile("shader/" + path + ".fs");
     auto shader = make_shared<Shader>(vert_src, frag_src);
     shaderMap[path] = shader;
 
@@ -34,11 +33,9 @@ shared_ptr<Shader> Resource::LoadShader(string path) {
 }
 
 shared_ptr<Model> Resource::LoadModel(string path) {
-    if (modelMap.find(path) != modelMap.end() && modelMap[path].use_count() > 0) {
-        return modelMap[path].lock();
-    }
+    CHECK_RES(modelMap, path);
 
-    auto importer = File::ReadModelImporter(path);
+    auto importer = File::ReadModelImporter("model/" + path);
 
     if (importer == nullptr) {
         return nullptr;
@@ -88,35 +85,37 @@ shared_ptr<Model> Resource::LoadModel(string path) {
 }
 
 shared_ptr<Material> Resource::LoadMaterial(string path) {
-    if (materialMap.find(path) != materialMap.end() && materialMap[path].use_count() > 0) {
-        return materialMap[path].lock();
-    }
+    CHECK_RES(materialMap, path);
 
-    auto json = File::ReadJson(path);
+    auto json = File::ReadJson("material/" + path + ".json");
     auto material = make_shared<Material>(json);
     materialMap[path] = material;
     
     return material;
 }
 
+shared_ptr<Prefab> Resource::LoadPrefab(string path) {
+    CHECK_RES(prefabMap, path);
+
+    auto json = File::ReadJson("prefab/" + path + ".json");
+    auto prefab = make_shared<Prefab>(json);
+    prefabMap[path] = prefab;
+    
+    return prefab;
+}
+
 void Resource::Log() {
     cout << "===== Texture =====" << endl;
-    for (auto iter : textureMap) {
-        cout << iter.first << ", " << iter.second.lock() << endl;
-    }
+    Log<Texture>(textureMap);
 
     cout << "===== Shader =====" << endl;
-    for (auto iter : shaderMap) {
-        cout << iter.first << ", " << iter.second.lock() << endl;
-    }
+    Log<Shader>(shaderMap);
 
     cout << "===== Model =====" << endl;
-    for (auto iter : modelMap) {
-        cout << iter.first << ", " << iter.second.lock() << endl;
-    }
+    Log<Model>(modelMap);
 
     cout << "===== Material =====" << endl;
-    for (auto iter : materialMap) {
-        cout << iter.first << ", " << iter.second.lock() << endl;
-    }
+    Log<Material>(materialMap);
 }
+
+#undef CHECK_RES
