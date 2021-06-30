@@ -70,6 +70,18 @@ void Shader::SetMatrix(string name, glm::mat4& matrix) {
     glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
 }
 
+void Shader::SetVector3(string name, glm::vec3& vector) {
+    this->Use();
+    int location = this->GetLocation(name);
+    glUniform3f(location, vector.x, vector.y, vector.z);
+}
+
+void Shader::SetVector4(string name, glm::vec4& vector) {
+    this->Use();
+    int location = this->GetLocation(name);
+    glUniform4f(location, vector.x, vector.y, vector.z, vector.w);
+}
+
 int Shader::GetInt(string name) {
     this->Use();
     int location = this->GetLocation(name);
@@ -98,6 +110,26 @@ Color Shader::GetColor(string name) {
     glGetUniformfv(this->id, location, (float*)&color);
     
     return color;
+}
+
+glm::vec3 Shader::GetVector3(string name) {
+    this->Use();
+    int location = this->GetLocation(name);
+
+    glm::vec3 vector;
+    glGetUniformfv(this->id, location, (float*)&vector);
+    
+    return vector;
+}
+
+glm::vec4 Shader::GetVector4(string name) {
+    this->Use();
+    int location = this->GetLocation(name);
+
+    glm::vec4 vector;
+    glGetUniformfv(this->id, location, (float*)&vector);
+    
+    return vector;
 }
 
 void Shader::Compile(int shader, string& src) {

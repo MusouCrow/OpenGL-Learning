@@ -18,10 +18,13 @@ public:
     void SetFloat(string name, float value);
     void SetColor(string name, Color& color);
     void SetMatrix(string name, glm::mat4& matrix);
-    
+    void SetVector3(string name, glm::vec3& vector);
+    void SetVector4(string name, glm::vec4& vector);
     int GetInt(string name);
     float GetFloat(string name);
     Color GetColor(string name);
+    glm::vec3 GetVector3(string name);
+    glm::vec4 GetVector4(string name);
 private:
     int id = 0;
     void Compile(int shader, string& src);

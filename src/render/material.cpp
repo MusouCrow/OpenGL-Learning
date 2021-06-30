@@ -1,3 +1,7 @@
+#include <math.h>
+#include <glm/vec3.hpp>
+
+#include "util/color.hpp"
 #include "lib/resource.h"
 #include "material.h"
 
@@ -20,6 +24,12 @@ Material::Material(jsonxx::json& json) {
             this->shader->SetFloat(key, value.as_float());
         }
     }
+
+    auto dir = glm::vec3(0, -1, 0);
+    this->shader->SetVector3("_LightDir", dir);
+
+    auto color = Color {2, 1, 1, 1};
+    this->shader->SetColor("_LightColor", color);
 }
 shared_ptr<Shader> Material::GetShader() {
     return this->shader;

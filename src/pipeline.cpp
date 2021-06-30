@@ -43,18 +43,29 @@ void Pipeline::Draw() {
 void Pipeline::OnCameraUpdated() {
     auto view = this->camera->GetView();
     auto projection = this->camera->GetProjection();
+    auto pos = this->camera->transform->GetPosition();
     
     for (auto renderer : this->renderers) {
         renderer->SetMatrix("View", view);
         renderer->SetMatrix("Projection", projection);
+
+        for (auto m : renderer->materials) {
+            m->GetShader()->SetVector3("_ViewPos", pos);
+        }
     }
 }
 
 void Pipeline::AddRenderer(shared_ptr<Renderer> renderer) {
     auto view = this->camera->GetView();
     auto projection = this->camera->GetProjection();
+    auto pos = this->camera->transform->GetPosition();
 
     renderer->SetMatrix("View", view);
     renderer->SetMatrix("Projection", projection);
+
+    for (auto m : renderer->materials) {
+        m->GetShader()->SetVector3("_ViewPos", pos);
+    }
+
     this->renderers.push_back(renderer);
 }
