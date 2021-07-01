@@ -18,18 +18,18 @@ Material::Material(jsonxx::json& json) {
             this->textureMap[key] = texture;
         }
         else if (value.is_bool()) {
-            this->shader->SetInt(key, (int)value.as_bool());
+            this->shader->SetValue(key, (int)value.as_bool());
         }
         else if (value.is_float()) {
-            this->shader->SetFloat(key, value.as_float());
+            this->shader->SetValue(key, value.as_float());
         }
     }
-
+    
     auto dir = glm::vec3(0, -1, 0);
-    this->shader->SetVector3("_LightDir", dir);
+    this->shader->SetValue("_LightDir", dir);
 
     auto color = Color {2, 1, 1, 1};
-    this->shader->SetColor("_LightColor", color);
+    this->shader->SetValue("_LightColor", color);
 }
 shared_ptr<Shader> Material::GetShader() {
     return this->shader;

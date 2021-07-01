@@ -16,7 +16,7 @@ void Renderer::Draw() {
 
 void Renderer::SetMatrix(string name, glm::mat4& matrix) {
     for (auto material : materials) {
-        material->GetShader()->SetMatrix(name, matrix);
+        material->GetShader()->SetValue(name, matrix);
     }
 }
 
