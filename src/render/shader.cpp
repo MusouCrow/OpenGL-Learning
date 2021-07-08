@@ -3,7 +3,33 @@
 #include "lib/file.h"
 #include "shader.h"
 
-Shader::Shader(string& vert_src, string& frag_src) {
+auto Shader::intMap = map<string, int>();
+auto Shader::floatMap = map<string, float>();
+auto Shader::colorMap = map<string, Color>();
+auto Shader::mat4Map = map<string, glm::mat4>();
+auto Shader::vec3Map = map<string, glm::vec3>();
+auto Shader::vec4Map = map<string, glm::vec4>();
+
+#define READY(name) this->Use(); int location = this->GetLocation(name);
+#define GEN_GLOBAL_GET_FUNC(T, F, map) void Shader::SetGlobal##F(const string& name, T value) { map[name] = value; }
+#define GEN_GLOBAL_SET_FUNC(T, F, map) T Shader::GetGlobal##F(const string& name) { return map[name]; }
+#define APPLY_GLOBAL_SHADER(map, func) for (auto iter : map) { func(iter.first, iter.second); }
+
+GEN_GLOBAL_GET_FUNC(int, Int, Shader::intMap)
+GEN_GLOBAL_GET_FUNC(float, Float, Shader::floatMap)
+GEN_GLOBAL_GET_FUNC(const Color&, Color, Shader::colorMap)
+GEN_GLOBAL_GET_FUNC(const glm::mat4&, Matrix, Shader::mat4Map)
+GEN_GLOBAL_GET_FUNC(const glm::vec3&, Vector3, Shader::vec3Map)
+GEN_GLOBAL_GET_FUNC(const glm::vec4&, Vector4, Shader::vec4Map)
+
+GEN_GLOBAL_SET_FUNC(int, Int, Shader::intMap)
+GEN_GLOBAL_SET_FUNC(float, Float, Shader::floatMap)
+GEN_GLOBAL_SET_FUNC(Color, Color, Shader::colorMap)
+GEN_GLOBAL_SET_FUNC(glm::mat4, Matrix, Shader::mat4Map)
+GEN_GLOBAL_SET_FUNC(glm::vec3, Vector3, Shader::vec3Map)
+GEN_GLOBAL_SET_FUNC(glm::vec4, Vector4, Shader::vec4Map)
+
+Shader::Shader(const string& vert_src, const string& frag_src) {
     int vert_shader = glCreateShader(GL_VERTEX_SHADER);
     int frag_shader = glCreateShader(GL_FRAGMENT_SHADER);
 
@@ -38,7 +64,7 @@ int Shader::GetId() {
     return this->id;
 }
 
-int Shader::GetLocation(string name) {
+int Shader::GetLocation(const string& name) {
     return glGetUniformLocation(this->id, name.c_str());
 }
 
@@ -46,45 +72,47 @@ void Shader::Use() {
     glUseProgram(this->id);
 }
 
-void Shader::SetInt(string name, int value) {
-    this->Use();
-    int location = this->GetLocation(name);
+void Shader::ApplyGlobal() {
+    APPLY_GLOBAL_SHADER(Shader::intMap, SetInt)
+    APPLY_GLOBAL_SHADER(Shader::floatMap, SetFloat)
+    APPLY_GLOBAL_SHADER(Shader::colorMap, SetColor)
+    APPLY_GLOBAL_SHADER(Shader::mat4Map, SetMatrix)
+    APPLY_GLOBAL_SHADER(Shader::vec3Map, SetVector3)
+    APPLY_GLOBAL_SHADER(Shader::vec4Map, SetVector4)
+}
+
+void Shader::SetInt(const string& name, int value) {
+    READY(name);
     glUniform1i(location, value);
 }
 
-void Shader::SetFloat(string name, float value) {
-    this->Use();
-    int location = this->GetLocation(name);
+void Shader::SetFloat(const string& name, float value) {
+    READY(name);
     glUniform1f(location, value);
 }
 
-void Shader::SetColor(string name, Color& color) {
-    this->Use();
-    int location = this->GetLocation(name);
-    glUniform4f(location, color.r, color.g, color.b, color.a);
+void Shader::SetColor(const string& name, const Color& value) {
+    READY(name);
+    glUniform4f(location, value.r, value.g, value.b, value.a);
 }
 
-void Shader::SetMatrix(string name, glm::mat4& matrix) {
-    this->Use();
-    int location = this->GetLocation(name);
-    glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
+void Shader::SetMatrix(const string& name, const glm::mat4& value) {
+    READY(name);
+    glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(value));
 }
 
-void Shader::SetVector3(string name, glm::vec3& vector) {
-    this->Use();
-    int location = this->GetLocation(name);
-    glUniform3f(location, vector.x, vector.y, vector.z);
+void Shader::SetVector3(const string& name, const glm::vec3& value) {
+    READY(name);
+    glUniform3f(location, value.x, value.y, value.z);
 }
 
-void Shader::SetVector4(string name, glm::vec4& vector) {
-    this->Use();
-    int location = this->GetLocation(name);
-    glUniform4f(location, vector.x, vector.y, vector.z, vector.w);
+void Shader::SetVector4(const string& name, const glm::vec4& value) {
+    READY(name);
+    glUniform4f(location, value.x, value.y, value.z, value.w);
 }
 
-int Shader::GetInt(string name) {
-    this->Use();
-    int location = this->GetLocation(name);
+int Shader::GetInt(const string& name) {
+    READY(name);
     
     int value;
     glGetUniformiv(this->id, location, &value);
@@ -92,9 +120,8 @@ int Shader::GetInt(string name) {
     return value;
 }
 
-float Shader::GetFloat(string name) {
-    this->Use();
-    int location = this->GetLocation(name);
+float Shader::GetFloat(const string& name) {
+    READY(name);
 
     float value;
     glGetUniformfv(this->id, location, &value);
@@ -102,9 +129,8 @@ float Shader::GetFloat(string name) {
     return value;
 }
 
-Color Shader::GetColor(string name) {
-    this->Use();
-    int location = this->GetLocation(name);
+Color Shader::GetColor(const string& name) {
+    READY(name);
 
     Color color;
     glGetUniformfv(this->id, location, (float*)&color);
@@ -112,9 +138,8 @@ Color Shader::GetColor(string name) {
     return color;
 }
 
-glm::vec3 Shader::GetVector3(string name) {
-    this->Use();
-    int location = this->GetLocation(name);
+glm::vec3 Shader::GetVector3(const string& name) {
+    READY(name);
 
     glm::vec3 vector;
     glGetUniformfv(this->id, location, (float*)&vector);
@@ -122,9 +147,8 @@ glm::vec3 Shader::GetVector3(string name) {
     return vector;
 }
 
-glm::vec4 Shader::GetVector4(string name) {
-    this->Use();
-    int location = this->GetLocation(name);
+glm::vec4 Shader::GetVector4(const string& name) {
+    READY(name);
 
     glm::vec4 vector;
     glGetUniformfv(this->id, location, (float*)&vector);
@@ -132,7 +156,7 @@ glm::vec4 Shader::GetVector4(string name) {
     return vector;
 }
 
-void Shader::Compile(int shader, string& src) {
+void Shader::Compile(int shader, const string& src) {
     const char* code = src.c_str();
 
     glShaderSource(shader, 1, &code, nullptr);
@@ -147,3 +171,8 @@ void Shader::Compile(int shader, string& src) {
         cout << "Shader Compile Error: " << log << endl;
     }
 }
+
+#undef READY
+#undef GEN_GLOBAL_GET_FUNC
+#undef GEN_GLOBAL_SET_FUNC
+#undef APPLY_GLOBAL_SHADER

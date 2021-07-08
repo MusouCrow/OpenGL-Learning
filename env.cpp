@@ -56,6 +56,11 @@ void Init() {
     auto renderer = NewRenderer(prefab);
     Pipeline::GetInstance()->AddRenderer(renderer);
     Resource::Log();
+
+    auto dir = glm::vec3(0, -1, 0);
+    auto color = Color {2, 1, 1, 1};
+    Shader::SetGlobalVector3("_LightDir", dir);
+    Shader::SetGlobalColor("_LightColor", color);
 }
 
 void Update() {
