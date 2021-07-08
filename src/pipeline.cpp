@@ -50,7 +50,7 @@ void Pipeline::OnCameraUpdated() {
         renderer->SetMatrix("Projection", projection);
 
         for (auto m : renderer->materials) {
-            m->GetShader()->SetValue("_ViewPos", pos);
+            m->GetShader()->SetVector3("_ViewPos", pos);
         }
     }
 }
@@ -64,7 +64,7 @@ void Pipeline::AddRenderer(shared_ptr<Renderer> renderer) {
     renderer->SetMatrix("Projection", projection);
 
     for (auto m : renderer->materials) {
-        m->GetShader()->SetValue("_ViewPos", pos);
+        m->GetShader()->SetVector3("_ViewPos", pos);
     }
 
     this->renderers.push_back(renderer);

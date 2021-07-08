@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.10)
 project(opengl_learning)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 11)
 set(GLFW_DIR 3rd/glfw)
 set(GLAD_DIR 3rd/glad)
 set(GLM_DIR 3rd/glm)
