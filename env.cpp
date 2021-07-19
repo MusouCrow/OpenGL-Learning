@@ -31,6 +31,9 @@ Tween tween = Tween([]() {
     transform->SetRotate(rot);
 });
 
+auto lightDir = glm::vec3(0, -1, 0);
+auto lightColor = Color {2, 1, 1, 1};
+
 void SetCamera(TranUnit& unit) {
     auto transform = Pipeline::GetInstance()->camera->transform;
     current = TranUnit {transform->GetPosition(), transform->GetRotate()};
@@ -57,10 +60,8 @@ void Init() {
     Pipeline::GetInstance()->AddRenderer(renderer);
     Resource::Log();
 
-    auto dir = glm::vec3(0, -1, 0);
-    auto color = Color {2, 1, 1, 1};
-    Shader::SetGlobalVector3("_LightDir", dir);
-    Shader::SetGlobalColor("_LightColor", color);
+    Shader::SetGlobalVector3("_LightDir", lightDir);
+    Shader::SetGlobalColor("_LightColor", lightColor);
 }
 
 void Update() {
@@ -96,6 +97,20 @@ void UIDraw() {
     if (ImGui::Button("Top")) {
         SetCamera(units[2]);
     }
-    
+
+    ImGui::Separator();
+
+    if (ImGui::CollapsingHeader("Light")) {
+        ImGui::Text("Direction");
+        if (ImGui::DragFloat3("", (float*)&lightDir)) {
+            Shader::SetGlobalVector3("_LightDir", lightDir);
+        }
+
+        ImGui::Text("Color");
+        if (ImGui::ColorEdit3("", (float*)&lightColor, ImGuiColorEditFlags_HDR)) {
+            Shader::SetGlobalColor("_LightColor", lightColor);
+        }
+    }
+
     ImGui::End();
 }

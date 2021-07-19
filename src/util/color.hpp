@@ -8,6 +8,10 @@ struct Color {
     float g;
     float b;
     float a;
+
+    Color Mul(float value) {
+        return Color {this->r * value, this->g * value, this->b * value, this->a * value};
+    }
 };
 
 #endif
