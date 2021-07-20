@@ -30,7 +30,7 @@ void main() {
     float diffuse = Diffuse(normal, _LightDir);
     float specular = Specular(normal, _LightDir, viewDir);
 
-    vec3 litColor = (diffuse + specular) * _LightColor.rgb;
+    vec3 litColor = 0.2 + (diffuse + specular) * _LightColor.rgb;
     vec4 color = texture(BaseMap, f_uv) * Color;
     color.rgb *= litColor;
 

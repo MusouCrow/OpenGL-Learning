@@ -15,9 +15,9 @@ public:
     glm::vec3 GetFront();
     glm::vec3 GetUp();
     glm::vec3 GetRight();
-    void SetPosition(glm::vec3 position);
-    void SetScale(glm::vec3 scale);
-    void SetRotate(glm::vec3 rotate);
+    void SetPosition(const glm::vec3& position);
+    void SetScale(const glm::vec3& scale);
+    void SetRotate(const glm::vec3& rotate);
 private:
     glm::mat4 position;
     glm::mat4 scale;

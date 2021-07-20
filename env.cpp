@@ -31,8 +31,8 @@ Tween tween = Tween([]() {
     transform->SetRotate(rot);
 });
 
-auto lightDir = glm::vec3(0, -1, 0);
 auto lightColor = Color {2, 1, 1, 1};
+auto lightTransform = Transform(nullptr);
 
 void SetCamera(TranUnit& unit) {
     auto transform = Pipeline::GetInstance()->camera->transform;
@@ -41,11 +41,14 @@ void SetCamera(TranUnit& unit) {
     tween.Enter(0.0f, 1.0f, 0.7f, Easing::InOutQuad);
 }
 
-shared_ptr<Renderer> NewRenderer(shared_ptr<Prefab> prefab) {
+shared_ptr<Renderer> NewRenderer(string prefabPath) {
+    auto prefab = Resource::LoadPrefab(prefabPath);
+
     auto renderer = make_shared<Renderer>(prefab->model, prefab->materials);
     renderer->transform->SetPosition(prefab->position);
     renderer->transform->SetScale(prefab->scale);
     renderer->transform->SetRotate(prefab->rotation);
+    Pipeline::GetInstance()->AddRenderer(renderer);
 
     return renderer;
 }
@@ -55,12 +58,13 @@ void Init() {
     transform->SetPosition(glm::vec3(0.0f, 0.0f, -5.0f));
     transform->SetRotate(glm::vec3(0.0f, 0.0f, 0.0f));
 
-    auto prefab = Resource::LoadPrefab("nanosuit");
-    auto renderer = NewRenderer(prefab);
-    Pipeline::GetInstance()->AddRenderer(renderer);
+    NewRenderer("nanosuit");
+    NewRenderer("box");
+    
     Resource::Log();
 
-    Shader::SetGlobalVector3("_LightDir", lightDir);
+    lightTransform.SetRotate(glm::vec3(45, -45, 0));
+    Shader::SetGlobalVector3("_LightDir", lightTransform.GetFront());
     Shader::SetGlobalColor("_LightColor", lightColor);
 }
 
@@ -101,9 +105,13 @@ void UIDraw() {
     ImGui::Separator();
 
     if (ImGui::CollapsingHeader("Light")) {
-        ImGui::Text("Direction");
-        if (ImGui::DragFloat3("", (float*)&lightDir)) {
-            Shader::SetGlobalVector3("_LightDir", lightDir);
+        ImGui::Text("Rotation");
+        
+        auto rotation = lightTransform.GetRotate();
+
+        if (ImGui::DragFloat3("", (float*)&rotation)) {
+            lightTransform.SetRotate(rotation);
+            Shader::SetGlobalVector3("_LightDir", lightTransform.GetFront());
         }
 
         ImGui::Text("Color");

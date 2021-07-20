@@ -2,7 +2,6 @@
 #include "file.h"
 
 auto Resource::textureMap = map<string, weak_ptr<Texture>>();
-auto Resource::shaderMap = map<string, weak_ptr<Shader>>();
 auto Resource::modelMap = map<string, weak_ptr<Model>>();
 auto Resource::materialMap = map<string, weak_ptr<Material>>();
 auto Resource::prefabMap = map<string, weak_ptr<Prefab>>();
@@ -22,12 +21,9 @@ shared_ptr<Texture> Resource::LoadTexture(string path) {
 }
 
 shared_ptr<Shader> Resource::LoadShader(string path) {
-    CHECK_RES(shaderMap, path);
-
     string vert_src = File::ReadFile("shader/" + path + ".vs");
     string frag_src = File::ReadFile("shader/" + path + ".fs");
     auto shader = make_shared<Shader>(vert_src, frag_src);
-    shaderMap[path] = shader;
 
     return shader;
 }
@@ -107,9 +103,6 @@ shared_ptr<Prefab> Resource::LoadPrefab(string path) {
 void Resource::Log() {
     cout << "===== Texture =====" << endl;
     Log<Texture>(textureMap);
-
-    cout << "===== Shader =====" << endl;
-    Log<Shader>(shaderMap);
 
     cout << "===== Model =====" << endl;
     Log<Model>(modelMap);

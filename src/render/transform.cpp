@@ -41,17 +41,17 @@ glm::vec3 Transform::GetRight() {
     return this->right;
 }
 
-void Transform::SetPosition(glm::vec3 position) {
+void Transform::SetPosition(const glm::vec3& position) {
     this->position = glm::translate(glm::mat4(1.0f), position);
     this->Adjust();
 }
 
-void Transform::SetScale(glm::vec3 scale) {
+void Transform::SetScale(const glm::vec3& scale) {
     this->scale = glm::scale(glm::mat4(1.0f), scale);
     this->Adjust();
 }
 
-void Transform::SetRotate(glm::vec3 rotate) {
+void Transform::SetRotate(const glm::vec3& rotate) {
     this->rotation_val = rotate;
 
     this->rotation = glm::mat4(1.0f);
@@ -65,7 +65,10 @@ void Transform::SetRotate(glm::vec3 rotate) {
 void Transform::Adjust() {
     this->matrix = this->position * this->scale * this->rotation;
     this->AdjustDirection();
-    this->OnAdjust();
+
+    if (this->OnAdjust != nullptr) {
+        this->OnAdjust();
+    }
 }
 
 void Transform::AdjustDirection() {

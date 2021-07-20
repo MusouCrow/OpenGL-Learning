@@ -26,7 +26,6 @@ public:
     };
 private:
     static map<string, weak_ptr<Texture>> textureMap;
-    static map<string, weak_ptr<Shader>> shaderMap;
     static map<string, weak_ptr<Model>> modelMap;
     static map<string, weak_ptr<Material>> materialMap;
     static map<string, weak_ptr<Prefab>> prefabMap;

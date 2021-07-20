@@ -9,7 +9,7 @@ Texture::Texture(unsigned char* data, int width, int height, int channel) {
     this->SetWrap(GL_REPEAT);
     this->SetFilter(GL_NEAREST);
 
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, channel == 3 ? GL_RGB : GL_RGBA, GL_UNSIGNED_BYTE, data);
 }
 
 Texture::~Texture() {
