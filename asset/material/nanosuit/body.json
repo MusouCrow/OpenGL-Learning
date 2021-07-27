@@ -1,4 +1,6 @@
 {
-    "Shader": "test",
-    "BaseMap": "nanosuit/body_dif.png"
+    "Shader": "phong",
+    "BaseMap": "nanosuit/body_dif.png",
+    "NormalMap": "nanosuit/body_showroom_ddn.png",
+    "SpecMap": "nanosuit/body_showroom_spec.png"
 }

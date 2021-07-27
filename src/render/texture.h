@@ -7,7 +7,7 @@ class Texture {
 public:
     Texture(unsigned char* data, int width, int height, int channel);
     ~Texture();
-    void Bind(int index=0);
+    void Bind(int index);
     void SetWrap(int wrap);
     void SetFilter(int filter);
     int GetWrap();

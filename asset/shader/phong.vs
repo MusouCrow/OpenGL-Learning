@@ -3,6 +3,8 @@
 layout (location = 0) in vec3 v_vert;
 layout (location = 1) in vec3 v_normal;
 layout (location = 2) in vec2 v_texCoord;
+layout (location = 3) in vec3 v_tangent;
+layout (location = 4) in vec3 v_bitangent;
 
 out vec2 f_uv;
 out vec3 f_normalWS;
@@ -13,8 +15,10 @@ uniform mat4 View;
 uniform mat4 Projection;
 
 void main() {
+    mat3 normalMat = mat3(transpose(inverse(Model)));
+    
     f_uv = v_texCoord;
-    f_normalWS = mat3(transpose(inverse(Model))) * v_normal;
+    f_normalWS = normalMat * v_normal;
     f_positionWS = vec3(Model * vec4(v_vert, 1.0));
 
     gl_Position = Projection * View * vec4(f_positionWS, 1.0);

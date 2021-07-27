@@ -44,20 +44,29 @@ shared_ptr<Model> Resource::LoadModel(string path) {
         vector<Vertex> vertices;
         vector<int> indices;
         auto meshData = scene->mMeshes[n];
+        bool hasTangents = meshData->HasTangentsAndBitangents();
 
         for (int i = 0; i < meshData->mNumVertices; i++) {
             auto& v = meshData->mVertices[i];
             auto& n = meshData->mNormals[i];
-            auto& t = meshData->mTextureCoords[0][i];
+            auto& uv = meshData->mTextureCoords[0][i];
+            auto& t = meshData->mTangents[i];
+            auto& b = meshData->mBitangents[i];
+
             /*
             cout << "Vertices: " << v.x << ", " << v.y << ", " << v.z << endl;
-            cout << "Normals: " << n.x << ", " << n.y << endl;
-            cout << "TextureCoords: " << t.x << ", " << t.y << endl;
-            */           
+            cout << "Normals: " << n.x << ", " << n.y << ", " << n.z << endl;
+            cout << "Tangents: " << t.x << ", " << t.y << ", " << t.z << endl;
+            cout << "Bitangents: " << b.x << ", " << b.y << ", " << b.z << endl;
+            cout << "TextureCoords: " << uv.x << ", " << uv.y << endl;
+            */
+           
             auto vertex = Vertex {
                 glm::vec3(v.x, v.y, v.z),
                 glm::vec3(n.x, n.y, n.z),
-                glm::vec2(t.x, t.y)
+                glm::vec2(uv.x, uv.y),
+                hasTangents ? glm::vec3(t.x, t.y, t.z) : glm::vec3(0, 0, 0),
+                hasTangents ? glm::vec3(b.x, b.y, b.z) : glm::vec3(0, 0, 0)
             };
 
             vertices.push_back(vertex);

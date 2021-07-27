@@ -42,6 +42,7 @@ void Material::Bind() {
     for (auto iter : this->textureMap) {
         i++;
         iter.second->Bind(i);
+        this->shader->SetInt(iter.first, i);
     }
     
     this->shader->ApplyGlobal();

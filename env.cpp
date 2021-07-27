@@ -59,7 +59,7 @@ void Init() {
     transform->SetRotate(glm::vec3(0.0f, 0.0f, 0.0f));
 
     NewRenderer("nanosuit");
-    NewRenderer("box");
+    // NewRenderer("box");
     
     Resource::Log();
 

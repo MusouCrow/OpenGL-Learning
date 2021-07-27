@@ -1,4 +1,5 @@
 {
-    "Shader": "test",
-    "BaseMap": "nanosuit/glass_dif.png"
+    "Shader": "phong",
+    "BaseMap": "nanosuit/glass_dif.png",
+    "NormalMap": "nanosuit/glass_ddn.png"
 }

@@ -11,6 +11,8 @@ uniform vec3 _ViewPos;
 
 uniform vec4 Color = vec4(1.0f, 1.0f, 1.0f, 1.0f);
 uniform sampler2D BaseMap;
+uniform sampler2D SpecMap;
+uniform sampler2D NormalMap;
 
 float Diffuse(vec3 normal, vec3 lightDir) {
     return max(dot(normal, lightDir), 0);
@@ -24,15 +26,17 @@ float Specular(vec3 normal, vec3 lightDir, vec3 viewDir) {
 }
 
 void main() {
+    // vec3 normal = texture(NormalMap, f_uv).rgb;
+    // normal = normalize(normal * 2.0 - 1.0);
+    
     vec3 normal = normalize(f_normalWS);
     vec3 viewDir = _ViewPos - f_positionWS;
 
-    float diffuse = Diffuse(normal, _LightDir);
-    float specular = Specular(normal, _LightDir, viewDir);
+    vec3 diffuse = Diffuse(normal, _LightDir) * texture(BaseMap, f_uv).rgb;
+    vec3 specular = Specular(normal, _LightDir, viewDir) * texture(SpecMap, f_uv).rgb;
 
-    vec3 litColor = 0.2 + (diffuse + specular) * _LightColor.rgb;
-    vec4 color = texture(BaseMap, f_uv) * Color;
-    color.rgb *= litColor;
+    vec3 litColor = 0.1 + (diffuse + specular) * _LightColor.rgb;
+    vec4 color = Color * vec4(litColor, 1.0);
 
     FragColor = color;
 }
