@@ -3,6 +3,8 @@ out vec4 FragColor;
 
 in vec2 f_uv;
 in vec3 f_normalWS;
+in vec3 f_tangentWS;
+in vec3 f_bitangentWS;
 in vec3 f_positionWS;
 
 uniform vec3 _LightDir;
@@ -26,16 +28,19 @@ float Specular(vec3 normal, vec3 lightDir, vec3 viewDir) {
 }
 
 void main() {
-    // vec3 normal = texture(NormalMap, f_uv).rgb;
-    // normal = normalize(normal * 2.0 - 1.0);
+    vec3 normalTS = texture(NormalMap, f_uv).rgb;
+    normalTS = normalize(normalTS * 2.0 - 1.0);
     
-    vec3 normal = normalize(f_normalWS);
+    mat3 TBN = mat3(f_tangentWS, f_bitangentWS, f_normalWS);
+    vec3 normal = TBN * normalTS;
+    
+    // vec3 normal = f_normalWS;
     vec3 viewDir = _ViewPos - f_positionWS;
 
     vec3 diffuse = Diffuse(normal, _LightDir) * texture(BaseMap, f_uv).rgb;
     vec3 specular = Specular(normal, _LightDir, viewDir) * texture(SpecMap, f_uv).rgb;
 
-    vec3 litColor = 0.1 + (diffuse + specular) * _LightColor.rgb;
+    vec3 litColor = (diffuse + specular) * _LightColor.rgb;
     vec4 color = Color * vec4(litColor, 1.0);
 
     FragColor = color;
