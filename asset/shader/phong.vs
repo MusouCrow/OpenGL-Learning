@@ -15,11 +15,12 @@ out vec3 f_positionWS;
 uniform mat4 Model;
 uniform mat4 View;
 uniform mat4 Projection;
+uniform vec4 TexelST;
 
 void main() {
     mat3 normalMat = mat3(transpose(inverse(Model)));
     
-    f_uv = v_texCoord;
+    f_uv = v_texCoord * TexelST.xy + TexelST.zw;
     f_normalWS = normalize(normalMat * v_normal);
     f_tangentWS = normalize(normalMat * v_tangent);
     f_bitangentWS = normalize(normalMat * v_bitangent);

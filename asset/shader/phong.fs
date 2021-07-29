@@ -34,11 +34,12 @@ void main() {
     mat3 TBN = mat3(f_tangentWS, f_bitangentWS, f_normalWS);
     vec3 normal = TBN * normalTS;
     
-    // vec3 normal = f_normalWS;
-    vec3 viewDir = _ViewPos - f_positionWS;
+    normal = f_normalWS;
+    vec3 viewDir = normalize(_ViewPos - f_positionWS);
+    vec3 lightDir = normalize(_LightDir);
 
-    vec3 diffuse = Diffuse(normal, _LightDir) * texture(BaseMap, f_uv).rgb;
-    vec3 specular = Specular(normal, _LightDir, viewDir) * texture(SpecMap, f_uv).rgb;
+    vec3 diffuse = Diffuse(normal, lightDir) * texture(BaseMap, f_uv).rgb;
+    vec3 specular = Specular(normal, lightDir, viewDir) * texture(SpecMap, f_uv).rgb;
 
     vec3 litColor = (diffuse + specular) * _LightColor.rgb;
     vec4 color = Color * vec4(litColor, 1.0);

@@ -1,5 +1,6 @@
 {
     "Shader": "phong",
     "BaseMap": "nanosuit/glass_dif.png",
-    "NormalMap": "nanosuit/glass_ddn.png"
+    "NormalMap": "nanosuit/glass_ddn.png",
+    "TexelST": [1, 1, 0, 0]
 }

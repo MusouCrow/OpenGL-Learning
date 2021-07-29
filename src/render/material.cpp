@@ -23,6 +23,14 @@ Material::Material(jsonxx::json& json) {
         else if (value.is_float()) {
             this->shader->SetFloat(key, value.as_float());
         }
+        else if (value.is_array()) {
+            auto& array = value.as_array();
+
+            if (array.size() == 4) {
+                auto vec = glm::vec4(array[0].as_float(), array[1].as_float(), array[2].as_float(), array[3].as_float());
+                this->shader->SetVector4(key, vec);
+            }
+        }
     }
 }
 shared_ptr<Shader> Material::GetShader() {

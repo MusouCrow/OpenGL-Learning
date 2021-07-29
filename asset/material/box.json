@@ -1,4 +1,6 @@
 {
     "Shader": "phong",
-    "BaseMap": "wall.jpg"
+    "BaseMap": "brickwall.jpg",
+    "NormalMap": "brickwall_normal.jpg",
+    "TexelST": [2, 2, 0, 0]
 }

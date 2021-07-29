@@ -59,11 +59,11 @@ void Init() {
     transform->SetRotate(glm::vec3(0.0f, 0.0f, 0.0f));
 
     NewRenderer("nanosuit");
-    // NewRenderer("box");
+    NewRenderer("box");
     
     Resource::Log();
 
-    lightTransform.SetRotate(glm::vec3(45, -45, 0));
+    lightTransform.SetRotate(glm::vec3(0, 175, 0));
     Shader::SetGlobalVector3("_LightDir", lightTransform.GetFront());
     Shader::SetGlobalColor("_LightColor", lightColor);
 }
