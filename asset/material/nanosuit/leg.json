@@ -1,7 +1,6 @@
 {
     "Shader": "phong",
     "BaseMap": "nanosuit/leg_dif.png",
-    "NormalMap": "nanosuit/leg_showroom_ddn.png",
     "SpecMap": "nanosuit/leg_showroom_spec.png",
     "TexelST": [1, 1, 0, 0]
 }

@@ -1,7 +1,6 @@
 {
     "Shader": "phong",
     "BaseMap": "nanosuit/helmet_diff.png",
-    "NormalMap": "nanosuit/helmet_showroom_ddn.png",
     "SpecMap": "nanosuit/helmet_showroom_spec.png",
     "TexelST": [1, 1, 0, 0]
 }

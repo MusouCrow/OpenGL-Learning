@@ -3,6 +3,7 @@
 
 #include "util/color.hpp"
 #include "lib/resource.h"
+#include "lib/text.h"
 #include "material.h"
 
 Material::Material(jsonxx::json& json) {
@@ -16,6 +17,9 @@ Material::Material(jsonxx::json& json) {
         if (key.substr(key.size() - 3, 3) == "Map") {
             auto texture = Resource::LoadTexture(value.as_string());
             this->textureMap[key] = texture;
+
+            auto keyword = Text::ToKeyword(key);
+            this->shader->SetKeyword(keyword, true);
         }
         else if (value.is_bool()) {
             this->shader->SetInt(key, (int)value.as_bool());
@@ -32,6 +36,8 @@ Material::Material(jsonxx::json& json) {
             }
         }
     }
+
+    this->shader->Apply();
 }
 shared_ptr<Shader> Material::GetShader() {
     return this->shader;

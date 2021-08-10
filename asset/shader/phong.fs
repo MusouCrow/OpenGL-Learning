@@ -1,4 +1,3 @@
-#version 330 core
 out vec4 FragColor;
 
 in vec2 f_uv;
@@ -28,13 +27,16 @@ float Specular(vec3 normal, vec3 lightDir, vec3 viewDir) {
 }
 
 void main() {
-    vec3 normalTS = texture(NormalMap, f_uv).rgb;
-    normalTS = normalize(normalTS * 2.0 - 1.0);
+    #ifdef NORMAL_MAP
+        vec3 normalTS = texture(NormalMap, f_uv).rgb;
+        normalTS = normalize(normalTS * 2.0 - 1.0);
+        
+        mat3 TBN = mat3(f_tangentWS, f_bitangentWS, f_normalWS);
+        vec3 normal = TBN * normalTS;
+    #else
+        vec3 normal = f_normalWS;
+    #endif
     
-    mat3 TBN = mat3(f_tangentWS, f_bitangentWS, f_normalWS);
-    vec3 normal = TBN * normalTS;
-    
-    normal = f_normalWS;
     vec3 viewDir = normalize(_ViewPos - f_positionWS);
     vec3 lightDir = normalize(_LightDir);
 

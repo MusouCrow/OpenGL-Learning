@@ -2,14 +2,15 @@
 #define RENDER_SHADER_H
 
 #include <map>
+#include <set>
+#include <vector>
 #include <glm/glm.hpp>
 #include "common.h"
 #include "util/color.hpp"
 
 class Shader {
 public:
-    Shader(const string& path);
-    Shader(const string& vert_src, const string& frag_src);
+    Shader(string vert_src, string frag_src);
     ~Shader();
     int GetId();
     int GetLocation(const string& name);
@@ -27,6 +28,10 @@ public:
     Color GetColor(const string& name);
     glm::vec3 GetVector3(const string& name);
     glm::vec4 GetVector4(const string& name);
+
+    void Apply();
+    void SetKeyword(const string& key, bool value);
+    bool HasKeyword(const string& key);
     
     static void SetGlobalInt(const string& name, int value);
     static void SetGlobalFloat(const string& name, float value);
@@ -42,14 +47,27 @@ public:
     static glm::vec4 GetGlobalVector4(const string& name);
 private:
     int id = 0;
-    void Compile(int shader, const string& src);
+    set<string> keywords;
+    string vert_src;
+    string frag_src;
 
-    static map<string, int> intMap;
-    static map<string, float> floatMap;
-    static map<string, Color> colorMap;
-    static map<string, glm::mat4> mat4Map;
-    static map<string, glm::vec3> vec3Map;
-    static map<string, glm::vec4> vec4Map;
+    void Init();
+    void Compile(int shader, const string& src);
+    string GenerateDefines();
+
+    map<string, int> intMap;
+    map<string, float> floatMap;
+    map<string, Color> colorMap;
+    map<string, glm::mat4> mat4Map;
+    map<string, glm::vec3> vec3Map;
+    map<string, glm::vec4> vec4Map;
+
+    static map<string, int> IntMap;
+    static map<string, float> FloatMap;
+    static map<string, Color> ColorMap;
+    static map<string, glm::mat4> Mat4Map;
+    static map<string, glm::vec3> Vec3Map;
+    static map<string, glm::vec4> Vec4Map;
 };
 
 #endif
