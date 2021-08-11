@@ -2,5 +2,7 @@
     "Shader": "phong",
     "BaseMap": "brickwall.jpg",
     "NormalMap": "brickwall_normal.jpg",
+    "SpecMap": "white.png",
+    "SpecularRange": 64,
     "TexelST": [2, 2, 0, 0]
 }

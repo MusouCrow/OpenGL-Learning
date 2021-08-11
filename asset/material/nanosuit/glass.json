@@ -1,5 +1,6 @@
 {
     "Shader": "phong",
     "BaseMap": "nanosuit/glass_dif.png",
+    "SpecularRange": 8,
     "TexelST": [1, 1, 0, 0]
 }

@@ -2,5 +2,6 @@
     "Shader": "phong",
     "BaseMap": "nanosuit/arm_dif.png",
     "SpecMap": "nanosuit/arm_showroom_spec.png",
+    "SpecularRange": 8,
     "TexelST": [1, 1, 0, 0]
 }

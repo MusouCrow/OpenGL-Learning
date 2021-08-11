@@ -24,7 +24,7 @@ Material::Material(jsonxx::json& json) {
         else if (value.is_bool()) {
             this->shader->SetInt(key, (int)value.as_bool());
         }
-        else if (value.is_float()) {
+        else if (value.is_float() || value.is_integer()) {
             this->shader->SetFloat(key, value.as_float());
         }
         else if (value.is_array()) {

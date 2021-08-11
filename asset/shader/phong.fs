@@ -14,6 +14,7 @@ uniform vec4 Color = vec4(1.0f, 1.0f, 1.0f, 1.0f);
 uniform sampler2D BaseMap;
 uniform sampler2D SpecMap;
 uniform sampler2D NormalMap;
+uniform float SpecularRange;
 
 float Diffuse(vec3 normal, vec3 lightDir) {
     return max(dot(normal, lightDir), 0);
@@ -23,7 +24,7 @@ float Specular(vec3 normal, vec3 lightDir, vec3 viewDir) {
     vec3 halfVec = normalize(lightDir + viewDir);
     float rate = dot(normal, halfVec);
 
-    return pow(max(rate, 0), 8);
+    return pow(max(rate, 0), SpecularRange);
 }
 
 void main() {
