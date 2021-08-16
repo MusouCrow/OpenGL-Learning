@@ -6,8 +6,8 @@ in vec3 f_tangentWS;
 in vec3 f_bitangentWS;
 in vec3 f_positionWS;
 
-uniform vec3 _LightDir;
-uniform vec4 _LightColor;
+uniform vec3 _MainLightDir;
+uniform vec4 _MainLightColor;
 uniform vec3 _ViewPos;
 
 uniform vec4 Color = vec4(1.0f, 1.0f, 1.0f, 1.0f);
@@ -39,12 +39,12 @@ void main() {
     #endif
     
     vec3 viewDir = normalize(_ViewPos - f_positionWS);
-    vec3 lightDir = normalize(_LightDir);
+    vec3 lightDir = normalize(_MainLightDir);
 
     vec3 diffuse = Diffuse(normal, lightDir) * texture(BaseMap, f_uv).rgb;
     vec3 specular = Specular(normal, lightDir, viewDir) * texture(SpecMap, f_uv).rgb;
 
-    vec3 litColor = (diffuse + specular) * _LightColor.rgb;
+    vec3 litColor = (diffuse + specular) * _MainLightColor.rgb;
     vec4 color = Color * vec4(litColor, 1.0);
 
     FragColor = color;

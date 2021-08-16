@@ -31,7 +31,6 @@ Tween tween = Tween([]() {
     transform->SetRotate(rot);
 });
 
-auto lightColor = Color {2, 1, 1, 1};
 auto lightTransform = Transform(nullptr);
 
 void SetCamera(TranUnit& unit) {
@@ -64,8 +63,9 @@ void Init() {
     Resource::Log();
 
     lightTransform.SetRotate(glm::vec3(0, 175, 0));
-    Shader::SetGlobalVector3("_LightDir", lightTransform.GetFront());
-    Shader::SetGlobalColor("_LightColor", lightColor);
+    auto lighting = Pipeline::GetInstance()->lighting;
+    lighting->mainLight.color = Color {2, 1, 1, 1};
+    lighting->mainLight.direction = lightTransform.GetFront();
 }
 
 void Update() {
@@ -107,17 +107,16 @@ void UIDraw() {
     if (ImGui::CollapsingHeader("Light")) {
         ImGui::Text("Rotation");
         
+        auto lighting = Pipeline::GetInstance()->lighting;
         auto rotation = lightTransform.GetRotate();
 
         if (ImGui::DragFloat3("", (float*)&rotation)) {
             lightTransform.SetRotate(rotation);
-            Shader::SetGlobalVector3("_LightDir", lightTransform.GetFront());
+            lighting->mainLight.direction = lightTransform.GetFront();
         }
 
         ImGui::Text("Color");
-        if (ImGui::ColorEdit3("", (float*)&lightColor, ImGuiColorEditFlags_HDR)) {
-            Shader::SetGlobalColor("_LightColor", lightColor);
-        }
+        ImGui::ColorEdit3("", (float*)&lighting->mainLight.color, ImGuiColorEditFlags_HDR);
     }
 
     ImGui::End();

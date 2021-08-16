@@ -4,12 +4,14 @@
 #include <vector>
 #include "common.h"
 #include "render/camera.h"
+#include "render/lighting.h"
 #include "render/renderer/base.h"
 
 class Pipeline {
 public:
     static Pipeline* GetInstance();
     shared_ptr<Camera> camera;
+    shared_ptr<Lighting> lighting;
     void Init(int width, int height);
     void Draw();
     void AddRenderer(shared_ptr<Renderer> renderer);
